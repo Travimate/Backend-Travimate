@@ -5,7 +5,7 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql:///postgres
+    url: jdbc:postgresql://google/synrgy-challenge:asia-southeast1:synergy-database?socketFactory=com.google.cloud.sql.postgres.SocketFactory&cloudSqlInstance=synrgy-challenge:asia-southeast1:synergy-database&enableIamAuth=true&sslmode=disable
     username: p432672951215-bycuhu@gcp-sa-cloud-sql.iam.gserviceaccount.com
     password: travimateDB
     hikari:

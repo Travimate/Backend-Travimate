@@ -38,3 +38,10 @@ jobs:
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
 
+      - name: Deploy to App Engine
+        run: |
+          gcloud app deploy app.yaml --quiet
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+
+

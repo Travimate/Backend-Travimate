@@ -72,10 +72,10 @@ jobs:
         run: |
           gcloud auth configure-docker asia-southeast1-docker.pkg.dev
 
-      - name: Build and Push Docker Image
-        run: |
-          docker build -t asia-southeast1-docker.pkg.dev/synrgy-challenge/cloud-run-source-deploy:latest .
-          docker push asia-southeast1-docker.pkg.dev/synrgy-challenge/cloud-run-source-deploy:latest .
+#      - name: Build and Push Docker Image
+#        run: |
+#          docker build -t asia-southeast1-docker.pkg.dev/synrgy-challenge/cloud-run-source-deploy:latest .
+#          docker push asia-southeast1-docker.pkg.dev/synrgy-challenge/cloud-run-source-deploy:latest .
       - name: Checkout Repository
         uses: actions/checkout@v4
 

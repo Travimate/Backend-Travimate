@@ -76,7 +76,6 @@ jobs:
         run: |
           docker build -t asia-southeast1-docker.pkg.dev/synrgy-challenge/cloud-run-source-deploy:latest .
           docker push asia-southeast1-docker.pkg.dev/synrgy-challenge/cloud-run-source-deploy:latest .
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 

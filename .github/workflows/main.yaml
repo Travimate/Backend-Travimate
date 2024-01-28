@@ -45,9 +45,10 @@
 name: CI/CD with GCP
 
 on:
-  # push:
-  #   branches: [ "main" ]
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+#  workflow_dispatch:
 
 env:
   PROJECT_ID: synrgy-challenge

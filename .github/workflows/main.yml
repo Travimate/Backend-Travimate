@@ -40,8 +40,11 @@ jobs:
 
       - name: Deploy to App Engine
         run: |
-          gcloud app deploy app.yaml --quiet
+          gcloud app deploy /path/to/app.yaml --quiet
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
 
+      - name: Debug
+        run: |
+          ls -l /home/runner/work/Backend-Java-Travimate/Backend-Java-Travimate/
 

@@ -70,11 +70,6 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
-      - name: Activate gcloud authentication
-        run: gcloud auth activate-service-account
-        with:
-          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-
       - name: Build with Maven
         run: mvn clean install
 

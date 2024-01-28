@@ -61,6 +61,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Set default GCP account
+        run: gcloud config set account akhmadfajar223@gmail.com
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -85,12 +92,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-        with:
-          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-      - name: Set default GCP account
-        run: gcloud config set account akhmadfajar223@gmail.com
 
       # - name: Google Auth
       #   id: auth

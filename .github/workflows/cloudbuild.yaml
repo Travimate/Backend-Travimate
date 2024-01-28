@@ -53,7 +53,7 @@ on:
 env:
   PROJECT_ID: synrgy-challenge
   GAR_LOCATION: asia-southeast1
-  SERVICE: backend-java-travimate
+  SERVICE: synrgy-backend-java-travimate
   REGION: asia-southeast1
 
 jobs:

@@ -87,12 +87,12 @@ jobs:
 
       - name: Build Project
         run: mvn clean install -DskipTests
-      - name: Login to docker hub
-        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
-      - name: Build docker image
-        run: docker build -t Travimate/Backend-Java-Travimate .
-      - name: Publish image to docker hub
-        run: docker push Travimate/Backend-Java-Travimate:latest
+#      - name: Login to docker hub
+#        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+#      - name: Build docker image
+#        run: docker build -t Travimate/Backend-Java-Travimate .
+#      - name: Publish image to docker hub
+#        run: docker push Travimate/Backend-Java-Travimate:latest
 
   deploy:
     needs: build

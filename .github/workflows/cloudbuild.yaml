@@ -74,6 +74,7 @@ jobs:
         run: mvn clean install
 
   deploy:
+    needs: build
     # Add 'id-token' with the intended permissions for workload identity federation
     permissions:
       contents: 'read'

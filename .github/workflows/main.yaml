@@ -41,7 +41,7 @@ jobs:
         run: 'gcloud info'
 
       - name: 'login ssh'
-        run: gcloud compute ssh --zone "asia-southeast1-b" "instance-1" --project "synrgy-challenge" --command "cd Backend-Java-Travimate && mvn spring-boot:run"
+        run: gcloud compute ssh --zone "asia-southeast1-b" "instance-1" --project "synrgy-challenge" --command "gh repo clone Travimate/Backend-Java-Travimate && cd Backend-Java-Travimate && mvn spring-boot:run"
 
 #      - name: 'clone repository'
 #        run: gh repo clone Travimate/Backend-Java-Travimate

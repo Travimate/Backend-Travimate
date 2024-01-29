@@ -43,6 +43,7 @@ jobs:
 
       - name: 'login github from ssh'
         run: |-
+          cd .ssh
           cat ~/.ssh/github-key.pub
           ssh-add ~/.ssh.github-key
 

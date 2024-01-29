@@ -140,6 +140,12 @@ jobs:
         id: docker-auth
         run: |-
           gcloud auth configure-docker ${{ env.GAR_LOCATION }}-docker.pkg.dev
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: '17'
       - name: Build Project
         run: |-
           mvn clean install -DskipTests

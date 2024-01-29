@@ -61,16 +61,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/auth@v2
-        with:
-          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-      - name: Set default GCP account
-        run: gcloud config set account akhmadfajar223@gmail.com
-
-      - name: Configure Docker Credential Helper
-        run: |
-          gcloud auth configure-docker asia-southeast1-docker.pkg.dev
+#      - name: Set up Google Cloud SDK
+#        uses: google-github-actions/auth@v2
+#        with:
+#          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+#      - name: Set default GCP account
+#        run: gcloud config set account akhmadfajar223@gmail.com
+#
+#      - name: Configure Docker Credential Helper
+#        run: |
+#          gcloud auth configure-docker asia-southeast1-docker.pkg.dev
 
 #      - name: Build and Push Docker Image
 #        run: |

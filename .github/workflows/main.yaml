@@ -41,11 +41,11 @@ jobs:
       - name: 'login ssh'
         run: gcloud compute ssh --zone "asia-southeast1-b" "instance-1" --project "synrgy-challenge"
 
-      - name: 'login github from ssh'
-        run: |-
-          cd .ssh
-          cat ~/.ssh/github-key.pub
-          ssh-add ~/.ssh.github-key
+#      - name: 'login github from ssh'
+#        run: |-
+#          cd .ssh
+#          cat ~/.ssh/github-key.pub
+#          ssh-add ~/.ssh.github-key
 
       - name: 'clone repository'
         run: gh repo clone Travimate/Backend-Java-Travimate

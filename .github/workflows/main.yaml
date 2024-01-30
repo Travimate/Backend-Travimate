@@ -43,25 +43,25 @@ jobs:
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
 
-      #- name: 'login ssh'
-       # run: gcloud compute ssh --zone "asia-southeast1-b" "instance-1" --project "synrgy-challenge"
+      - name: 'login ssh'
+        run: gcloud compute ssh --zone "asia-southeast1-b" "instance-1" --project "synrgy-challenge"
 
-      #- name: 'clone repository'
-      #  run: gh repo clone Travimate/Backend-Java-Travimate
+      - name: 'clone repository'
+        run: gh repo clone Travimate/Backend-Java-Travimate
 
-     # - name: 'run spring boot'
-      #  run: |-
-     #     cd Backend-Java-Travimate
-     #     mvn spring-boot:run
-      - name: webfactory/ssh-agent
-        uses: webfactory/ssh-agent@v0.8.0
-        with:
-          ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
-        
-      - name: 'test'
+      - name: 'run spring boot'
         run: |-
-          cd .ssh
-          mkdir testing
+         cd Backend-Java-Travimate
+         mvn spring-boot:run
+      # - name: webfactory/ssh-agent
+      #   uses: webfactory/ssh-agent@v0.8.0
+      #   with:
+      #     ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
+        
+      # - name: 'test'
+      #   run: |-
+      #     cd .ssh
+      #     mkdir testing
           
             
 

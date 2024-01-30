@@ -43,18 +43,18 @@ jobs:
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
 
-      - name: 'login ssh'
-        run: gcloud compute ssh --zone "asia-southeast1-b" "instance-1" --project "synrgy-challenge"
+      # - name: 'login ssh'
+      #   run: gcloud compute ssh --zone "asia-southeast1-b" "instance-1" --project "synrgy-challenge"
 
       # - name: 'clone repository'
       #   run: gh repo clone Travimate/Backend-Java-Travimate
 
-      - name: 'run spring boot'
-        run: |-
-         # cd Backend-Java-Travimate
-         # mvn spring-boot:run
-         cd .ssh
-         mkdir testing
+      # - name: 'run spring boot'
+      #   run: |-
+      #    # cd Backend-Java-Travimate
+      #    # mvn spring-boot:run
+      #    cd .ssh
+      #    mkdir testing
       # - name: webfactory/ssh-agent
       #   uses: webfactory/ssh-agent@v0.8.0
       #   with:
@@ -65,7 +65,16 @@ jobs:
       #     cd .ssh
       #     mkdir testing
           
-            
+      - name: Deploy to GCE VM
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd .ssh
+            mkdir test
 
       # - id: 'compute-ssh'
       #   uses: 'google-github-actions/ssh-compute@v1'

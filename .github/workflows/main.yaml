@@ -24,8 +24,8 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
-      - name: Build with Maven
-        run: mvn clean install
+      # - name: Build with Maven
+      #   run: mvn clean install
 
   deploy:
     runs-on: ubuntu-latest
@@ -46,13 +46,15 @@ jobs:
       - name: 'login ssh'
         run: gcloud compute ssh --zone "asia-southeast1-b" "instance-1" --project "synrgy-challenge"
 
-      - name: 'clone repository'
-        run: gh repo clone Travimate/Backend-Java-Travimate
+      # - name: 'clone repository'
+      #   run: gh repo clone Travimate/Backend-Java-Travimate
 
       - name: 'run spring boot'
         run: |-
-         cd Backend-Java-Travimate
-         mvn spring-boot:run
+         # cd Backend-Java-Travimate
+         # mvn spring-boot:run
+         cd .ssh
+         mkdir testing
       # - name: webfactory/ssh-agent
       #   uses: webfactory/ssh-agent@v0.8.0
       #   with:

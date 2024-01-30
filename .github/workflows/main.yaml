@@ -53,18 +53,29 @@ jobs:
       #  run: |-
      #     cd Backend-Java-Travimate
      #     mvn spring-boot:run
-
-      - id: 'compute-ssh'
-        uses: 'google-github-actions/ssh-compute@v1'
+      - name: webfactory/ssh-agent
+        uses: webfactory/ssh-agent@v0.8.0
         with:
-         instance_name: 'instance-1'
-         zone: 'asia-southeast1-b'
-         ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
-         command: |-
-          echo 'Hello world'
-          gh repo clone Travimate/Backend-Java-Travimate
-          cd Backend-Java-Travimate
-          mvn spring-boot:run
+          ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
+        
+      - name: 'test'
+        run: |-
+          cd .ssh
+          mkdir testing
+          
+            
+
+      # - id: 'compute-ssh'
+      #   uses: 'google-github-actions/ssh-compute@v1'
+      #   with:
+      #    instance_name: 'instance-1'
+      #    zone: 'asia-southeast1-b'
+      #    ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
+      #    command: |-
+      #     echo 'Hello world'
+      #     gh repo clone Travimate/Backend-Java-Travimate
+      #     cd Backend-Java-Travimate
+      #     mvn spring-boot:run
           
 
     # Example of using the output

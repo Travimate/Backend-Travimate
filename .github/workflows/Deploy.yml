@@ -1,0 +1,43 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+env:
+  GH_TOKEN: '${{ secrets.GH_TOKEN }}'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Update file and build Maven in VM
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd .ssh
+            cd Backend-Java-Travimate
+            git pull origin main
+            mvn clean install
+          
+      - name: Kill and Install JAR file in VM
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            pkill -f Travimate-0.0.1-SNAPSHOT.jar
+            nohup java -jar .ssh/Backend-Java-Travimate/target/Travimate-0.0.1-SNAPSHOT.jar
+
+    # Example of using the output
+      - id: 'test'
+        run: |-
+          echo '${{ steps.compute-ssh.outputs.stdout }}'
+          echo '${{ steps.compute-ssh.outputs.stderr }}'

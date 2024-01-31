@@ -46,7 +46,9 @@ jobs:
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
       - name: Verify JAR file exists
-        run: tree
+        run: |-
+          cd home/runner/work/Backend-Java-Travimate/Backend-Java-Travimate/
+          tree
 
       - name: Upload JAR file to VM
         uses: appleboy/scp-action@master

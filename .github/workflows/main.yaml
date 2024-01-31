@@ -46,13 +46,6 @@ jobs:
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
 
-      - name: Display directory structure
-        run: ls -R
-
-
-      - name: Verify JAR file exists
-        run: ls ./target/Travimate-0.0.1-SNAPSHOT.jar
-
       - name: Upload JAR file to VM
         uses: appleboy/scp-action@master
         with:
@@ -60,7 +53,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
-          source: ./target/Travimate-0.0.1-SNAPSHOT.jar
+          source: /home/runner/work/Backend-Java-Travimate/Backend-Java-Travimate/target/Travimate-0.0.1-SNAPSHOT.jar
           target: .ssh/Travimate-0.0.1-SNAPSHOT.jar
           
       - name: Kill and Install JAR file di VM

@@ -38,8 +38,6 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             nohup java -jar .ssh/Backend-Java-Travimate/target/Travimate-0.0.1-SNAPSHOT.jar  > /dev/null 2>&1 &
-            sleep 1
-            exit 0
 
     # Example of using the output
       - id: 'test'

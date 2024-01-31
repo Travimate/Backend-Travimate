@@ -20,7 +20,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            pkill -f -9 Travimate-0.0.1-SNAPSHOT.jar
+            pkill -f Travimate-0.0.1-SNAPSHOT.jar || true
             cd .ssh
             rm -rf Backend-Java-Travimate
             gh repo clone Travimate/Backend-Java-Travimate

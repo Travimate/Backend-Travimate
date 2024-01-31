@@ -17,6 +17,8 @@ public class Airline {
 
     private String airline_name;
 
+    private String imageUrl;
+
 //    @OneToMany(mappedBy = "airline")
 //    private Set<Flight> flights;
 }

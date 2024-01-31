@@ -1,5 +1,7 @@
 package id.synrgy.travimate.service;
 
+import id.synrgy.travimate.dto.request.EditAirlineUrl;
+import id.synrgy.travimate.dto.request.FlightRequest;
 import id.synrgy.travimate.dto.response.*;
 import id.synrgy.travimate.exception.ExistingResourceFoundException;
 import id.synrgy.travimate.exception.ResourceNotFoundException;
@@ -47,8 +49,8 @@ public class FlightServiceImpl implements FlightService{
 
     @Override
     public FlightDTO createFlight(String dep, String arr, String airline, int flightNumber,
-                                  String flightClass, Date dof, LocalTime depTime, LocalTime arrTime,
-                                  LocalTime flightTime, Integer stock) {
+                                  String flightClass, Date dof, LocalTime depTime,
+                                  LocalTime arrTime, Integer stock) {
         Flight flight = new Flight();
         flight.setFlightNumber(airline.toUpperCase()+flightNumber);
         flight.setDep(findAirportByIATACode(dep));
@@ -58,11 +60,39 @@ public class FlightServiceImpl implements FlightService{
         flight.setDof(dof);
         flight.setDeparture_time(depTime);
         flight.setArrival_time(arrTime);
+
+        Duration duration = Duration.between(depTime, arrTime);
+        LocalTime flightTime = LocalTime.MIDNIGHT.plus(duration);
         flight.setFlight_time(flightTime);
         flight.setStock(stock);
         flightRepository.save(flight);
         return mapToDTO(flight);
     }
+
+    @Override
+    public FlightDTO createFlightWithDTO(FlightRequest flightRequest) {
+        Flight flight = new Flight();
+        String airline = flightRequest.getAirline();
+        int flightNumber = flightRequest.getFlightNumber();
+
+        flight.setFlightNumber(airline.toUpperCase() + flightNumber);
+        flight.setDep(findAirportByIATACode(flightRequest.getDep()));
+        flight.setArr(findAirportByIATACode(flightRequest.getArr()));
+        flight.setAirline(findAirlineByIATACode(airline));
+        flight.setFlightClass(Flight.FlightClass.valueOf(flightRequest.getFlightClass().toUpperCase()));
+        flight.setDof(flightRequest.getDof());
+        flight.setDeparture_time(flightRequest.getDepTime());
+        flight.setArrival_time(flightRequest.getArrTime());
+
+        Duration duration = Duration.between(flightRequest.getDepTime(), flightRequest.getArrTime());
+        LocalTime flightTime = LocalTime.MIDNIGHT.plus(duration);
+        flight.setFlight_time(flightTime);
+        flight.setStock(flightRequest.getStock());
+
+        flightRepository.save(flight);
+        return mapToDTO(flight);
+    }
+
 
     @Override
     public FlightDataDTO createFlightData(String airline, String dep, String arr, Integer stops,
@@ -347,7 +377,9 @@ public class FlightServiceImpl implements FlightService{
     }
 
     @Override
-    public Airline createAirline(Airline airline) {
+    public Airline editAirline(EditAirlineUrl dto) {
+        Airline airline = findAirlineByIATACode(dto.getIataCode());
+        airline.setImageUrl(dto.getUrl());
         airlineRepository.save(airline);
         return airline;
     }

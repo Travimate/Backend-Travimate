@@ -1,5 +1,7 @@
 package id.synrgy.travimate.service;
 
+import id.synrgy.travimate.dto.request.EditAirlineUrl;
+import id.synrgy.travimate.dto.request.FlightRequest;
 import id.synrgy.travimate.dto.response.FlightDTO;
 import id.synrgy.travimate.dto.response.FlightDataDTO;
 import id.synrgy.travimate.dto.response.FlightSearchDTO;
@@ -15,7 +17,7 @@ import java.util.Set;
 
 public interface FlightService {
     Airport createAirport(Airport airport);
-    Airline createAirline(Airline airline);
+    Airline editAirline(EditAirlineUrl airline);
     Airport findAirportByIATACode (String iataCode);
     Airline findAirlineByIATACode (String iataCode);
     Optional<Route> findRouteById (String id);
@@ -24,7 +26,7 @@ public interface FlightService {
 
     FlightDTO createFlight(String dep, String arr, String airline,
                            int flightNumber, String flightClass, Date dof, LocalTime depTime,
-                           LocalTime arrTime, LocalTime flightTime, Integer stock);
+                           LocalTime arrTime, Integer stock);
 
     FlightDataDTO createFlightData(String airline, String dep, String arr, Integer stops, Long adultFare,
                                    Long childFare, Boolean sameAsAdult, String flightClass, String connectingAirport,
@@ -32,4 +34,6 @@ public interface FlightService {
 
     Set<FlightSearchDTO> searchFlightResult(String dep, String arr, Date dateDep, Date dateArr, String flightClass,
                                             boolean isAroundTrip);
+
+    FlightDTO createFlightWithDTO(FlightRequest flightRequest);
 }

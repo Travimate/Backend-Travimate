@@ -1,9 +1,10 @@
 package id.synrgy.travimate.controller;
 
 
+import id.synrgy.travimate.dto.request.EditAirlineUrl;
+import id.synrgy.travimate.dto.request.FlightRequest;
 import id.synrgy.travimate.dto.response.ResponseHandler;
 import id.synrgy.travimate.model.Airline;
-import id.synrgy.travimate.model.Airport;
 import id.synrgy.travimate.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,19 +24,6 @@ public class FlightController {
         this.flightService = flightService;
     }
 
-    @PostMapping("/airline")
-    public ResponseEntity<Object> createAirline(Airline airline){
-        return ResponseHandler.generateResponseSuccess(flightService.createAirline(airline));
-    }
-    @GetMapping("/search-airline")
-    public ResponseEntity<Object> searchAirline(@RequestParam String iataCode){
-        return ResponseHandler.generateResponseSuccess(flightService.findAirlineByIATACode(iataCode));
-    }
-    @PostMapping("/airport")
-    public ResponseEntity<Object> createAirport(Airport airport){
-        return ResponseHandler.generateResponseSuccess(flightService.createAirport(airport));
-    }
-
     @PostMapping("/flight")
     public ResponseEntity<Object> createFlight(
                                                @RequestParam String dep,
@@ -46,10 +34,14 @@ public class FlightController {
                                                @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")Date dof,
                                                @RequestParam @DateTimeFormat(pattern = "HH.mm") LocalTime depTime,
                                                @RequestParam @DateTimeFormat(pattern = "HH.mm") LocalTime arrTime,
-                                               @RequestParam @DateTimeFormat(pattern = "HH.mm") LocalTime flightTime,
                                                @RequestParam Integer stock){
         return ResponseHandler.generateResponseSuccess(flightService.createFlight(
-                dep, arr, airline, flightNumber, flightClass, dof, depTime, arrTime, flightTime, stock));
+                dep, arr, airline, flightNumber, flightClass, dof, depTime, arrTime, stock));
+    }
+
+    @PostMapping("/dto-flight")
+    public ResponseEntity<Object> createFlight(@RequestBody FlightRequest flightRequest){
+        return ResponseHandler.generateResponseSuccess(flightService.createFlightWithDTO(flightRequest));
     }
 
 //    @PostMapping("/route")
@@ -85,5 +77,18 @@ public class FlightController {
         return ResponseHandler.generateResponseSuccess(flightService.searchFlightResult(dep, arr, dateDep,
                 dateArr, flightClass, isAroundTrip));
     }
+
+    @PostMapping("/edit-airline")
+    public ResponseEntity<Object> createAirline(@RequestBody EditAirlineUrl airline){
+        return ResponseHandler.generateResponseSuccess(flightService.editAirline(airline));
+    }
+    @GetMapping("/search-airline")
+    public ResponseEntity<Object> searchAirline(@RequestParam String iataCode){
+        return ResponseHandler.generateResponseSuccess(flightService.findAirlineByIATACode(iataCode));
+    }
+//    @PostMapping("/airport")
+//    public ResponseEntity<Object> createAirport(Airport airport){
+//        return ResponseHandler.generateResponseSuccess(flightService.createAirport(airport));
+//    }
 
 }

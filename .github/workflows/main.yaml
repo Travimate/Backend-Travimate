@@ -24,8 +24,8 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
-      # - name: Build with Maven
-      #   run: mvn clean install
+      - name: Build with Maven
+        run: mvn clean install
 
   deploy:
     runs-on: ubuntu-latest
@@ -43,29 +43,17 @@ jobs:
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
 
-      # - name: 'login ssh'
-      #   run: gcloud compute ssh --zone "asia-southeast1-b" "instance-1" --project "synrgy-challenge"
-
-      # - name: 'clone repository'
-      #   run: gh repo clone Travimate/Backend-Java-Travimate
-
-      # - name: 'run spring boot'
-      #   run: |-
-      #    # cd Backend-Java-Travimate
-      #    # mvn spring-boot:run
-      #    cd .ssh
-      #    mkdir testing
-      # - name: webfactory/ssh-agent
-      #   uses: webfactory/ssh-agent@v0.8.0
-      #   with:
-      #     ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
-        
-      # - name: 'test'
-      #   run: |-
-      #     cd .ssh
-      #     mkdir testing
+      - name: Upload JAR file to VM
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          source: ./target/Travimate-0.0.1-SNAPSHOT.jar
+          target: .ssh/Travimate-0.0.1-SNAPSHOT.jar
           
-      - name: Deploy to GCE VM
+      - name: Kill and Install JAR file di VM
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -73,21 +61,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd .ssh
-            mkdir test
-
-      # - id: 'compute-ssh'
-      #   uses: 'google-github-actions/ssh-compute@v1'
-      #   with:
-      #    instance_name: 'instance-1'
-      #    zone: 'asia-southeast1-b'
-      #    ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
-      #    command: |-
-      #     echo 'Hello world'
-      #     gh repo clone Travimate/Backend-Java-Travimate
-      #     cd Backend-Java-Travimate
-      #     mvn spring-boot:run
-          
+            pkill -f Travimate-0.0.1-SNAPSHOT.jar
+            nohup java -jar .ssh/Travimate-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
 
     # Example of using the output
       - id: 'test'

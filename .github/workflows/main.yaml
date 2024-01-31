@@ -46,6 +46,10 @@ jobs:
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
 
+      - name: Display directory structure
+        run: ls -R
+
+
       - name: Verify JAR file exists
         run: ls ./target/Travimate-0.0.1-SNAPSHOT.jar
 

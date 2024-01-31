@@ -12,7 +12,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    
+      - name: install
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            pkill -f Travimate-0.0.1-SNAPSHOT.jar
+            cd .ssh
+            rm -rf Backend-Java-Travimate
+            gh repo clone Travimate/Backend-Java-Travimate
+            cd Backend-Java-Travimate
+            mvn clean install
           
       - name: Kill and Install JAR file in VM
         uses: appleboy/ssh-action@master

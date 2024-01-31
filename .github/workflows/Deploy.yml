@@ -25,7 +25,7 @@ jobs:
             rm -rf Backend-Java-Travimate
             gh repo clone Travimate/Backend-Java-Travimate
             cd Backend-Java-Travimate
-            mvn clean install
+            mvn clean install -B
           
       - name: Kill and Install JAR file in VM
         uses: appleboy/ssh-action@master

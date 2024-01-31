@@ -24,6 +24,9 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
+      - name: Grant execute permission to mvnw
+        run: chmod +x mvnw
+
       - name: Build with Maven
         run: ./mvnw package -DskipTests
 

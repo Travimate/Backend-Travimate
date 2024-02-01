@@ -19,7 +19,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
-          script: |
+          script: |-
             cd .ssh
 #            rm -rf Backend-Java-Travimate
 #            gh repo clone Travimate/Backend-Java-Travimate

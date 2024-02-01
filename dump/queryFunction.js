@@ -120,5 +120,68 @@ const jsonData = [
   // ... Data JSON
 ];
 
-const resultSegments = queryConnectingFlightRoutes(jsonData);
-console.log(resultSegments);
+Source data -> JSON Traveloka .searchFlight
+
+query create Flight =>
+
+function query(data) {
+  const resultSegments = [];
+
+  _.chain(data)
+    .flatMap('connectingFlightRoutes')
+    .flatMap('segments')
+    .forEach((segment) => {
+      const departureAirport = _.get(segment, 'departureAirport', '');
+      const arrivalAirport = _.get(segment, 'arrivalAirport', '');
+      const flightNumber = _.get(segment, 'flightNumber', '').substring(3);
+      const airlineCode = _.get(segment, 'airlineCode', '');
+      const publishedClass = _.get(segment, 'segmentInventories[0].publishedClass', '');
+      const departureDate = _.get(segment, 'departureDate', {});
+      const formattedDepartureDate = `${departureDate.year}-${String(departureDate.month).padStart(2, '0')}-${String(departureDate.day).padStart(2, '0')}`;
+      const departureTime = _.get(segment, 'departureTime', {});
+      const formattedDepartureTime = `${String(departureTime.hour).padStart(2, '0')}.${String(departureTime.minute).padStart(2, '0')}`;
+      const arrivalTime = _.get(segment, 'arrivalTime', {});
+      const formattedArrivalTime = `${String(arrivalTime.hour).padStart(2, '0')}.${String(arrivalTime.minute).padStart(2, '0')}`;
+
+      const newSegment = {
+        dep: departureAirport,
+        arr: arrivalAirport,
+        airline: airlineCode,
+        flightNumber: flightNumber,
+        flightClass: publishedClass,
+        dof: formattedDepartureDate,
+        depTime: formattedDepartureTime,
+        arrTime: formattedArrivalTime,
+        stock: 150,
+      };
+
+      // Cek apakah ada duplikat berdasarkan beberapa properti
+      const isDuplicate = _.some(resultSegments, (existingSegment) =>
+        _.isEqual(_.pick(existingSegment, ['dep', 'arr', 'airline', 'flightNumber', 'flightClass']), _.pick(newSegment, ['dep', 'arr', 'airline', 'flightNumber', 'flightClass']))
+      );
+
+      // Jika tidak ada yang sama, tambahkan ke resultSegments
+      if (!isDuplicate) {
+        resultSegments.push(newSegment);
+      }
+    })
+    .value();
+
+  return resultSegments;
+}
+
+result =>
+{
+  "dep": "CGK",
+  "arr": "DPS",
+  "airline": "QZ",
+  "flightNumber": "802",
+  "flightClass": "ECONOMY",
+  "dof": "2024-02-06",
+  "depTime": "06.10",
+  "arrTime": "09.05",
+  "stock": 150
+}
+
+query edit Airline Image Link =>
+

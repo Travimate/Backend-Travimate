@@ -12,12 +12,15 @@ import id.synrgy.travimate.model.Route;
 
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 public interface FlightService {
     Airport createAirport(Airport airport);
-    Airline editAirline(EditAirlineUrl airline);
+
+    List<Object> editAirlines(List<EditAirlineUrl> dtos);
+
     Airport findAirportByIATACode (String iataCode);
     Airline findAirlineByIATACode (String iataCode);
     Optional<Route> findRouteById (String id);

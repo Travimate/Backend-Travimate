@@ -7,7 +7,6 @@ import id.synrgy.travimate.exception.ExistingResourceFoundException;
 import id.synrgy.travimate.exception.ResourceNotFoundException;
 import id.synrgy.travimate.model.*;
 import id.synrgy.travimate.repository.*;
-import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -377,12 +376,28 @@ public class FlightServiceImpl implements FlightService{
     }
 
     @Override
-    public Airline editAirline(EditAirlineUrl dto) {
-        Airline airline = findAirlineByIATACode(dto.getIataCode());
-        airline.setImageUrl(dto.getUrl());
-        airlineRepository.save(airline);
-        return airline;
+    public List<Object> editAirlines(List<EditAirlineUrl> dtos) {
+        List<Object> results = new ArrayList<>();
+
+        for (EditAirlineUrl dto : dtos) {
+            Optional<Airline> airline = airlineRepository.findByIataCode(dto.getIataCode());
+
+            if(airline.isPresent()){
+                Airline existingAirline = airline.get();
+                if(existingAirline.getImageUrl() == null){
+                    existingAirline.setImageUrl(dto.getUrl());
+                    airlineRepository.save(existingAirline);
+                    results.add(existingAirline);
+                } else {
+                    results.add("Data dengan 'iataCode' = '" + dto.getIataCode() + "' sudah memiliki URL gambar.");
+                }
+            } else {
+                results.add("Data dengan 'iataCode' = '" + dto.getIataCode() + "' tidak ditemukan.");
+            }
+        }
+        return results;
     }
+
 
     @Override
     public Airport findAirportByIATACode(String iataCode) {

@@ -20,15 +20,13 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            trap "echo 'Received SIGTERM signal, ignoring...'" TERM
-            pkill -f Travimate-0.0.1-SNAPSHOT.jar || true
             cd .ssh
-            rm -rf Backend-Java-Travimate
-            gh repo clone Travimate/Backend-Java-Travimate
+#            rm -rf Backend-Java-Travimate
+#            gh repo clone Travimate/Backend-Java-Travimate
             cd Backend-Java-Travimate
+            git pull
             mvn clean install
-            trap - TERM
-          
+
       - name: Kill and Install JAR file in VM
         uses: appleboy/ssh-action@master
         with:
@@ -37,9 +35,12 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
+            trap "echo 'Received SIGTERM signal, ignoring...'" TERM
+            pkill -f Travimate-0.0.1-SNAPSHOT.jar || true
             nohup java -jar .ssh/Backend-Java-Travimate/target/Travimate-0.0.1-SNAPSHOT.jar  > /dev/null 2>&1 &
+            trap - TERM
 
-    # Example of using the output
+      # Example of using the output
       - id: 'test'
         run: |-
           echo '${{ steps.compute-ssh.outputs.stdout }}'

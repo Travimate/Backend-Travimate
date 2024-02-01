@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/flight")
@@ -79,8 +80,8 @@ public class FlightController {
     }
 
     @PostMapping("/edit-airline")
-    public ResponseEntity<Object> createAirline(@RequestBody EditAirlineUrl airline){
-        return ResponseHandler.generateResponseSuccess(flightService.editAirline(airline));
+    public ResponseEntity<Object> createAirline(@RequestBody List<EditAirlineUrl> airline){
+        return ResponseHandler.generateResponseSuccess(flightService.editAirlines(airline));
     }
     @GetMapping("/search-airline")
     public ResponseEntity<Object> searchAirline(@RequestParam String iataCode){

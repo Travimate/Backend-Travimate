@@ -21,8 +21,6 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd .ssh
-#            rm -rf Backend-Java-Travimate
-#            gh repo clone Travimate/Backend-Java-Travimate
             cd Backend-Java-Travimate
             git pull
             mvn clean install

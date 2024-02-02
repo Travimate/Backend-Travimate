@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // database
 const db = require("./models");
 const Role = db.role;
-const PORT = process.env.PORT || 8080;
+const PORT = 8081;
 
 // db.sequelize.sync();
 // force: true will drop the table if it already exists

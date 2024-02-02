@@ -25,6 +25,19 @@ jobs:
             cd Backend-Java
             mvn clean install
 
+      - name: Run Node App
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd .ssh/Backend-Travimate
+            git pull
+            cd Backend-JS-Auth
+	    npm start
+
       - name: Kill and Run new JAR file in VM
         uses: appleboy/ssh-action@master
         with:

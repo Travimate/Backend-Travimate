@@ -13,10 +13,10 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE,
+  service: 'gmail',
   auth: {
-    user: process.env.EMAIL_SENDER,
-    pass: process.env.EMAIL_PASSWORD,
+    user: 'bgsp_aditya@student.uns.ac.id',
+    pass: 'kkxv jrgx ivfb zrdr',
   },
 });
 
@@ -35,10 +35,10 @@ exports.forgotPassword = (req, res) => {
       user.resetTokenExpires = Date.now() + 3600000; // Token expires in 1 hour
 
       user.save().then(() => {
-        const resetLink = `${process.env.BASE_URL}/reset-password?token=${resetToken}`;
+        const resetLink = `http://localhost:8081/reset-password?token=${resetToken}`;
 
         const mailOptions = {
-          from: process.env.EMAIL_SENDER,
+          from: 'bgsp_aditya@student.uns.ac.id',
           to: user.email,
           subject: "Reset Password",
           text: `Anda menerima email ini karena mengajukan reset password. Tolong klik tautan berikut untuk mereset password akun anda: ${resetLink}`,
@@ -129,10 +129,10 @@ exports.signup = (req, res) => {
 };
 
 function sendVerificationEmail(user) {
-  const verificationLink = `${process.env.BASE_URL}/api/auth/verify-email?token=${user.emailVerificationToken}`;
+  const verificationLink = `http://localhost:8081/api/auth/verify-email?token=${user.emailVerificationToken}`;
 
   const mailOptions = {
-    from: process.env.EMAIL_SENDER,
+    from: 'bgsp_aditya@student.uns.ac.id',
     to: user.email,
     subject: "Verifikasi Email",
     text: `Klik tautan berikut untuk memverifikasi email anda: ${verificationLink}`,

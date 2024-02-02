@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: install
+      - name: Git pull and Build MVN
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -20,12 +20,12 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd .ssh
-            cd Backend-Java-Travimate
+            cd .ssh/Backend-Travimate
             git pull
+            cd Backend-Java
             mvn clean install
 
-      - name: Kill and Install JAR file in VM
+      - name: Kill and Run new JAR file in VM
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -35,7 +35,7 @@ jobs:
           script: |
             trap "echo 'Received SIGTERM signal, ignoring...'" TERM
             pkill -f Travimate-0.0.1-SNAPSHOT.jar || true
-            nohup java -jar .ssh/Backend-Java-Travimate/target/Travimate-0.0.1-SNAPSHOT.jar  > /dev/null 2>&1 &
+            nohup java -jar .ssh/Backend-Travimate/Backend-Java/target/Travimate-0.0.1-SNAPSHOT.jar  > /dev/null 2>&1 &
             trap - TERM
 
       # Example of using the output

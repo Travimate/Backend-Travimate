@@ -4,10 +4,11 @@ const cors = require("cors");
 const swagger = require('./../swagger'); // Import the Swagger configuration
 const app = express();
 const corsOptions = {
-  origin: "http://localhost:8081",
+  origin: "https://localhost:8081",
 };
 const dotenv = require('dotenv');
 dotenv.config();
+app.use(cors());
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

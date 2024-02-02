@@ -6,6 +6,8 @@ const app = express();
 const corsOptions = {
   origin: "http://localhost:8081",
 };
+const dotenv = require('dotenv');
+dotenv.config();
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -33,9 +33,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd .ssh/Backend-Travimate
-            git pull
-            cd Backend-JS-Auth
+	    killall node || true
+            cd .ssh/Backend-Travimate/Backend-JS-Auth
 	    npm start
 
       - name: Kill and Run new JAR file in VM

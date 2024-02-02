@@ -4,7 +4,7 @@ const cors = require("cors");
 const swagger = require('./../swagger'); // Import the Swagger configuration
 const app = express();
 const corsOptions = {
-  origin: "https://localhost:8081",
+  origin: "http://localhost:8081",
 };
 const dotenv = require('dotenv');
 dotenv.config();

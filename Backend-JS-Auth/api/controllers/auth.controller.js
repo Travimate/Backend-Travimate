@@ -35,7 +35,7 @@ exports.forgotPassword = (req, res) => {
       user.resetTokenExpires = Date.now() + 3600000; // Token expires in 1 hour
 
       user.save().then(() => {
-        const resetLink = `https://localhost:8081/reset-password?token=${resetToken}`;
+        const resetLink = `//localhost:8081/reset-password?token=${resetToken}`;
 
         const mailOptions = {
           from: 'bgsp_aditya@student.uns.ac.id',
@@ -129,7 +129,7 @@ exports.signup = (req, res) => {
 };
 
 function sendVerificationEmail(user) {
-  const verificationLink = `https://localhost:8081/api/auth/verify-email?token=${user.emailVerificationToken}`;
+  const verificationLink = `//localhost:8081/api/auth/verify-email?token=${user.emailVerificationToken}`;
 
   const mailOptions = {
     from: 'bgsp_aditya@student.uns.ac.id',

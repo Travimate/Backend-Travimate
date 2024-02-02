@@ -7,14 +7,10 @@ const corsOptions = {
   origin: "//localhost:8081",
 };
 const dotenv = require('dotenv');
-// app.use(cors({
-//   origin: 'http://localhost:8081',
-//   credentials: true, // Enable credentials (if you need to include cookies or HTTP authentication)
-// }));
 dotenv.config();
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors(corsOptions));
 
 // database
 const db = require("./models");

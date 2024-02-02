@@ -5,7 +5,7 @@ info:
   description: API documentation for your application
 
 servers:
-  - url: //localhost:8081
+  - url: https://localhost:8081
 
 paths:
   /api/auth/signup:

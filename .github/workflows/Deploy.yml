@@ -33,9 +33,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-	    killall node || true
+            killall node || true
             cd .ssh/Backend-Travimate/Backend-JS-Auth
-	    npm start
+            npm start
 
       - name: Kill and Run new JAR file in VM
         uses: appleboy/ssh-action@master

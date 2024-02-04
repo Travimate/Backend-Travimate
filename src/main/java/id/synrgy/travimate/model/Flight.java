@@ -56,6 +56,4 @@ public class Flight {
 
     private Integer stock;
 
-//    @OneToMany(mappedBy = "flight")
-//    private Set<Ticket> tickets;
 }

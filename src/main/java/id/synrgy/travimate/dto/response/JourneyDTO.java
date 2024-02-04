@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,7 +35,7 @@ public class JourneyDTO {
 
     private Set<Airline> airline;
 
-    private Set<RouteDTO> route;
+    private List<RouteDTO> route;
 
     private Date dof;
 

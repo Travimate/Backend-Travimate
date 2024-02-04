@@ -15,6 +15,12 @@ import java.util.Set;
 @Repository
 public interface RouteRepository extends JpaRepository<Route, String> {
     Optional<Route> findById(String id);
+
+    @Query("SELECT r FROM Route r WHERE r.code = :code " +
+            "AND r.operated_airline = :airline " +
+            "AND r.connecting_airport IS NULL")
+    Optional<Route> findDirectRouteAndOperatedAirline(@Param("code") String code,
+                                                      @Param("airline") Airline operatedAirline);
     @Query("SELECT r FROM Route r WHERE r.code = :code " +
             "AND r.connecting_airport = :connecting_airport " +
             "AND r.operated_airline = :airline")

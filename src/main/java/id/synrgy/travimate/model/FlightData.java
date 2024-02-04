@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -30,6 +31,8 @@ public class FlightData {
     @ManyToOne
     @JoinColumn(name = "operated_airline", nullable = false)
     private Airline operated_airline;
+
+    private Date flight_date;
 
     private Integer stops;
 

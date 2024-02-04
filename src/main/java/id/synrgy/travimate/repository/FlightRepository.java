@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,9 +17,9 @@ public interface FlightRepository extends JpaRepository<Flight, UUID> {
             "AND f.dof = :dof " +
             "AND f.airline_id = UPPER(:airline) " +
             "AND f.flight_class = UPPER(:class)", nativeQuery = true)
-    Optional<Flight> findByAirportAndAirline(@Param("dep") String dep,
-                                             @Param("arr") String arr,
-                                             @Param("dof") Date dof,
-                                             @Param("airline") String airline,
-                                             @Param("class") String flightClass);
+    List<Flight> findByAirportAndAirline(@Param("dep") String dep,
+                                         @Param("arr") String arr,
+                                         @Param("dof") Date dof,
+                                         @Param("airline") String airline,
+                                         @Param("class") String flightClass);
 }

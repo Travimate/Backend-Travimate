@@ -1,114 +1,102 @@
 const _ = require('lodash');
 
 function query(data) {
-  return _.chain(data)
-    .map((item) => {
-      const connectingRoutes = _.get(item, 'connectingFlightRoutes', []);
-      const fareInfo = _.get(item, 'airlineFareInfo.detailedSearchFares[0].flightRouteFares', {});
+  const uniqueCombinations = new Set();
+  const result = [];
 
-      if (connectingRoutes.length === 2) {
-        const segments1 = _.get(connectingRoutes[0], 'segments', []);
-        const segments2 = _.get(connectingRoutes[1], 'segments', []);
+  data.forEach((item) => {
+    const connectingRoutes = _.get(item, 'connectingFlightRoutes', []);
+    const fareInfo = _.get(item, 'airlineFareInfo.detailedSearchFares[0].flightRouteFares', {});
 
-        if (segments1.length === 2 && segments1[0].arrivalAirport === segments1[1].departureAirport) {
-                  const dep1 = segments1[0].departureAirport;
-                  const arr1 = segments1[1].arrivalAirport;
-                  const connectingAirport1 = segments1[0].arrivalAirport;
-                  const airline1 = segments1[0].airlineCode;
-                  const flightClass1 = _.get(connectingRoutes[0], 'routeInventories[0].seatPublishedClass', '');
+    if (connectingRoutes.length === 2 && connectingRoutes[0].arrivalAirport === connectingRoutes[1].departureAirport) {
+      const segments = _.get(connectingRoutes[0], 'segments', []);
 
-                  const adultFare1 = _.get(fareInfo, 'adultBaseFare.amount', '');
-                  const childFare1 = _.get(fareInfo, 'childBaseFare.amount', '');
-                  const sameAsAdult1 = childFare1 === '0';
-                  const isDirect1 = false;
+      const dep = _.get(connectingRoutes[0], 'departureAirport', '');
+      const arr = _.get(connectingRoutes[1], 'arrivalAirport', '');
+      const connectingAirport = _.get(connectingRoutes[0], 'arrivalAirport', '');
+      const airline = _.get(segments[0], 'airlineCode', '');
+      const flightClass = _.get(connectingRoutes[0], 'routeInventories[0].seatPublishedClass', '');
 
-                  const dep2 = segments2[0].departureAirport;
-                  const arr2 = segments2[0].arrivalAirport;
-                  const connectingAirport2 = segments1[0].arrivalAirport;
-                  const airline2 = segments1[0].airlineCode;
-                  const flightClass2 = _.get(connectingRoutes[0], 'routeInventories[0].seatPublishedClass', '');
+      const departureDate = _.get(segments[0], 'departureDate', {});
+      const date = formatDate(departureDate);
 
-                  const adultFare2 = _.get(fareInfo, 'adultBaseFare.amount', '');
-                  const childFare2 = _.get(fareInfo, 'childBaseFare.amount', '');
-                  const sameAsAdult2 = childFare2 === '0';
-                  const isDirect2 = false;
+      const key = generateKey(dep, arr, connectingAirport, airline, flightClass);
 
-                  return [
-                    {
-                      airline: airline1,
-                      dep: dep1,
-                      arr: arr1,
-                      adultFare: adultFare1,
-                      ...(sameAsAdult1 ? { sameAsAdult: true } : { childFare: childFare1 }),
-                      flightClass: flightClass1,
-                      connectingAirport: connectingAirport1,
-                      isDirect: isDirect1,
-                    },
-                    {
-                      airline: airline2,
-                      dep: dep2,
-                      arr: arr2,
-                      adultFare: adultFare2,
-                      ...(sameAsAdult2 ? { sameAsAdult: true } : { childFare: childFare2 }),
-                      flightClass: flightClass2,
-                      connectingAirport: connectingAirport2,
-                      isDirect: isDirect2,
-                    },
-                  ];
-                }
+      if (!uniqueCombinations.has(key) && !shouldExcludeFlightClass(flightClass)) {
+        const adultFare = _.get(fareInfo, 'adultBaseFare.amount', '');
+        const childFare = _.get(fareInfo, 'childBaseFare.amount', '');
+        const sameAsAdult = childFare === '0';
+        const isDirect = false;
 
-        } else if (segments1.length === 1) {
-          const dep = segments1[0].departureAirport;
-          const arr = segments2[0].arrivalAirport;
-          const connectingAirport = segments1[0].arrivalAirport;
-          const airline = segments1[0].airlineCode;
-          const flightClass = _.get(connectingRoutes[0], 'routeInventories[0].seatPublishedClass', '');
+        result.push({
+          airline,
+          dep,
+          arr,
+          adultFare,
+          ...(sameAsAdult ? { sameAsAdult: true } : { childFare }),
+          flightClass,
+          connectingAirport,
+          isDirect,
+          date,
+        });
 
-          const adultFare = _.get(fareInfo, 'adultBaseFare.amount', '');
-          const childFare = _.get(fareInfo, 'childBaseFare.amount', '');
-          const sameAsAdult = childFare === '0';
-          const isDirect = false;
+        uniqueCombinations.add(key);
+      }
+    } else if (connectingRoutes.length === 1) {
+      const connectingRoute = connectingRoutes[0];
+      const segments = _.get(connectingRoute, 'segments', []);
 
-          return {
-            airline,
-            dep,
-            arr,
-            adultFare,
-            ...(sameAsAdult ? { sameAsAdult } : { childFare }),
-            flightClass,
-            connectingAirport,
-            isDirect,
-          };
-        }
-      } else if (connectingRoutes.length === 1) {
-        const connectingRoute = connectingRoutes[0];
-        const segments = _.get(connectingRoute, 'segments', []);
+      const dep = _.get(connectingRoute, 'departureAirport', '');
+      const arr = _.get(connectingRoute, 'arrivalAirport', '');
+      const connectingAirport = null;
+      const airline = _.get(segments[0], 'airlineCode', '');
+      const flightClass = _.get(connectingRoute, 'routeInventories[0].seatPublishedClass', '');
 
-        const dep = _.get(connectingRoute, 'departureAirport', '');
-        const arr = _.get(connectingRoute, 'arrivalAirport', '');
-        const connectingAirport = null;
-        const airline = _.get(segments[0], 'airlineCode', '');
-        const flightClass = _.get(connectingRoute, 'routeInventories[0].seatPublishedClass', '');
+      const departureDate = _.get(segments[0], 'departureDate', {});
+      const date = formatDate(departureDate);
 
+      const key = generateKey(dep, arr, connectingAirport, airline, flightClass);
+
+      if (!uniqueCombinations.has(key) && !shouldExcludeFlightClass(flightClass)) {
         const adultFare = _.get(fareInfo, 'adultBaseFare.amount', '');
         const childFare = _.get(fareInfo, 'childBaseFare.amount', '');
         const sameAsAdult = childFare === '0';
         const isDirect = true;
 
-        return {
+        result.push({
           airline,
           dep,
           arr,
           adultFare,
-          ...(sameAsAdult ? { sameAsAdult } : { childFare }),
+          ...(sameAsAdult ? { sameAsAdult: true } : { childFare }),
           flightClass,
           connectingAirport,
           isDirect,
-        };
+          date,
+        });
+
+        uniqueCombinations.add(key);
       }
-    })
-    .compact() // Remove undefined entries
-    .value();
+    }
+  });
+
+  return result;
+}
+
+function formatDate(dateObject) {
+  const year = dateObject.year;
+  const month = dateObject.month.padStart(2, '0');
+  const day = dateObject.day.padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function shouldExcludeFlightClass(flightClass) {
+  const excludedFlightClasses = ['PROMO', 'OTHERS'];
+  return excludedFlightClasses.includes(flightClass);
+}
+
+function generateKey(dep, arr, connectingAirport, airline, flightClass, adultFare = '', childFare = '', sameAsAdult = false) {
+  return `${airline}_${dep}_${arr}_${flightClass}_${adultFare}_${childFare}_${sameAsAdult}_${connectingAirport}`;
 }
 
 // Contoh penggunaan
@@ -142,6 +130,11 @@ function query(data) {
       const formattedDepartureTime = `${String(departureTime.hour).padStart(2, '0')}.${String(departureTime.minute).padStart(2, '0')}`;
       const arrivalTime = _.get(segment, 'arrivalTime', {});
       const formattedArrivalTime = `${String(arrivalTime.hour).padStart(2, '0')}.${String(arrivalTime.minute).padStart(2, '0')}`;
+
+      // Skip jika flightClass adalah "PROMO" atau "OTHERS"
+      if (publishedClass === 'PROMO' || publishedClass === 'OTHERS') {
+        return;
+      }
 
       const newSegment = {
         dep: departureAirport,

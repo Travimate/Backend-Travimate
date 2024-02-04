@@ -1,0 +1,189 @@
+openapi: 3.0.0
+info:
+  title: Your API Documentation
+  version: 1.0.0
+  description: API documentation for your application
+
+servers:
+  - url: http://localhost:8081
+
+paths:
+  /api/auth/signup:
+    post:
+      summary: Register a new user
+      tags:
+        - Authentication
+      requestBody:
+        description: User registration details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+  /api/auth/signin:
+    post:
+      summary: User login
+      tags:
+        - Authentication
+      requestBody:
+        description: User login credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+  /api/auth/logout:
+    post:
+      summary: User logout
+      tags:
+        - Authentication
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Logout successful
+  /api/users/:
+    get:
+      summary: Get all users (admin)
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+  /api/users/{id}:
+    get:
+      summary: Get a user by ID (admin)
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+    put:
+      summary: Update a user by ID (user)
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Updated user details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: User updated successfully
+  /api/users/{id}:
+    delete:
+      summary: Delete a user by ID (admin)
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User deleted successfully
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        id:
+          type: string
+          description: The auto-generated id of the user
+        username:
+          type: string
+          description: The username of user, must be unique and required
+        password:
+          type: string
+          description: The password of user account, must have at least an Uppercase Letter, a Number, a Special Character, and at least 6 character long
+        dob:
+          type: string
+          format: date
+          description: The date of birth of user
+        phone:
+          type: string
+          description: The phone number input by user
+        greeting:
+          type: string
+          description: The nick greeting of user
+        roles:
+          type: array
+          description: The array of roles attached to user
+          items:
+            type: string
+      example:
+        username: bytadit1
+        email: bytadit1@gmail.com
+        password: Bytadit_123
+        dob: 2024-01-16
+        phone: "098993128"
+        greeting: nyonya
+        roles:
+          - admin
+
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string

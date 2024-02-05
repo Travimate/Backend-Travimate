@@ -2,6 +2,7 @@ module.exports = {
   development: {
     HOST: "localhost",
     USER: "postgres",
+    // PORT:'',
     PASSWORD: "root",
     DB: "travi_development",
     dialect: "postgres",
@@ -16,6 +17,7 @@ module.exports = {
     HOST: "localhost",
     USER: "postgres",
     PASSWORD: "root",
+    // PORT:'',
     DB: "travi_test",
     dialect: "postgres",
     pool: {
@@ -29,6 +31,7 @@ module.exports = {
     HOST: "localhost",
     USER: "postgres",
     PASSWORD: "root",
+    // PORT:'',
     DB: "travi_production",
     dialect: "postgres",
     pool: {

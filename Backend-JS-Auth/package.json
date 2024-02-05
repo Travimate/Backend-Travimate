@@ -4,8 +4,15 @@
   "description": "",
   "main": "api/index.js",
   "scripts": {
-    "start": "nodemon api/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node start.js",
+    "db:init": "npm run db:create && npm run db:migrate && npm run db:seed",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sequelize": "sequelize --config api/config/config.json --migrations-path api/migrations",
+    "db:create": "npm run sequelize db:create",
+    "db:migrate": "npm run sequelize db:migrate",
+    "db:seed": "npm run sequelize db:seed:all",
+    "db:drop": "npm run sequelize db:drop",
+    "db:reset": "npm run db:drop && npm run db:init"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +34,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.0.3",
+    "sequelize-cli": "^6.6.2"
   }
 }

@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const swagger = require('./../swagger'); // Import the Swagger configuration
+const { sequelize, Role } = require("./models");
 const app = express();
 const corsOptions = {
   origin: "http://localhost:8081",
@@ -11,18 +12,23 @@ dotenv.config();
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+const PORT = process.env.PORT || 8081;
 
 // database
-const db = require("./models");
-const Role = db.role;
-const PORT = 8081;
+
+
+sequelize.sync().then(() => {
+  console.log("Database synchronized");
+  initial();
+});
 
 // db.sequelize.sync();
 // force: true will drop the table if it already exists
-db.sequelize.sync({ force: true }).then(() => {
-  console.log("Drop and Resync Database with { force: true }");
-  initial();
-});
+// db.sequelize.sync({ force: true }).then(() => {
+//   console.log("Drop and Resync Database with { force: true }");
+//   initial();
+// });
+
 // simple route
 app.get("/", (req, res) => {
   res.json({ message: "Express API is Ready" });
@@ -38,12 +44,13 @@ app.listen(PORT, () => {
 });
 
 function initial() {
-  Role.create({
-    id: 1,
-    name: "user",
+  Role.findOrCreate({
+    where: { id: 1 },
+    defaults: { name: "user" },
   });
-  Role.create({
-    id: 2,
-    name: "admin",
+
+  Role.findOrCreate({
+    where: { id: 2 },
+    defaults: { name: "admin" },
   });
 }

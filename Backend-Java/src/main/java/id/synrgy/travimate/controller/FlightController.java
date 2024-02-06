@@ -25,7 +25,6 @@ public class FlightController {
         this.flightService = flightService;
     }
 
-
     @PostMapping("/flight")
     public ResponseEntity<Object> createFlight(@RequestBody List<FlightRequestDTO> flightRequestDTO){
         return ResponseHandler.generateResponseSuccess(flightService.createFlight(flightRequestDTO));

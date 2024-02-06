@@ -1,14 +1,45 @@
 module.exports = {
-  HOST: "localhost", // or the IP address of your PostgreSQL server
-  // PORT: 5432,        // the port on which your PostgreSQL server is running
-  USER: "postgres",
-  PASSWORD: "root",
-  DB: "travi",
-  dialect: "postgres",
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000,
+  development: {
+    HOST: "localhost",
+    USER: "postgres",
+    // PORT:'',
+    PASSWORD: "root",
+    DB: "travi_development",
+    dialect: "postgres",
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
+  },
+  test: {
+    HOST: "localhost",
+    USER: "postgres",
+    PASSWORD: "root",
+    // PORT:'',
+    DB: "travi_test",
+    dialect: "postgres",
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
+  },
+  production: {
+    HOST: "localhost",
+    USER: "postgres",
+    PASSWORD: "root",
+    // PORT:'',
+    DB: "travi_production",
+    dialect: "postgres",
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
   },
 };
+

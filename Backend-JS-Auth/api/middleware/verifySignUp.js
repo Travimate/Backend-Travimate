@@ -1,105 +1,108 @@
 const db = require("../models");
 const ROLES = db.ROLES;
-const User = db.user;
+const User = db.User;
+const Role = db.Role;
 
 const checkDuplicateUsernameOrEmail = (req, res, next) => {
   // Username
-  if (!req.body.username || req.body.username.trim() === "") {
-    res.status(400).send({
+  const username = req.body.username;
+  const email = req.body.email;
+
+  if (!username || username.trim() === "") {
+    return res.status(400).send({
       message: "Aksi gagal! Username harus diisi!",
     });
-    return;
   }
-  
+
   User.findOne({
     where: {
-      username: req.body.username,
+      username: username,
     },
   }).then((user) => {
     if (user) {
-      res.status(400).send({
+      return res.status(400).send({
         message: "Aksi gagal! Username telah dipakai!",
       });
-      return;
     }
+
     // Email
-    if (!req.body.email || req.body.email.trim() === "") {
-        res.status(400).send({
-          message: "Aksi gagal! Email tidak dapat kosong!",
-        });
-        return;
-      }
+    if (!email || email.trim() === "") {
+      return res.status(400).send({
+        message: "Aksi gagal! Email tidak dapat kosong!",
+      });
+    }
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(req.body.email)) {
-      res.status(400).send({
+    if (!emailRegex.test(email)) {
+      return res.status(400).send({
         message: "Aksi gagal! Format email tidak valid!",
       });
-      return;
     }
+
     User.findOne({
       where: {
-        email: req.body.email,
+        email: email,
       },
+      include: [Role], 
     }).then((user) => {
       if (user) {
-        res.status(400).send({
+        return res.status(400).send({
           message: "Aksi gagal! Email telah dipakai!",
         });
-        return;
       }
       next();
     });
   });
 };
 
+
 const checkRolesExisted = (req, res, next) => {
   if (req.body.roles) {
     for (let i = 0; i < req.body.roles.length; i++) {
       if (!ROLES.includes(req.body.roles[i])) {
-        res.status(400).send({
+        return res.status(400).send({
           message: "Aksi Gagal! Role tidak tersedia = " + req.body.roles[i],
         });
-        return;
       }
     }
   }
   next();
 };
 
+
 const validatePassword = (req, res, next) => {
-    // Password validation
-    if (!req.body.password || req.body.password.trim() === "") {
-      res.status(400).send({
-        message: "Aksi gagal! Password tidak boleh kosong!",
-      });
-      return;
-    }
-  
-    // Password length check
-    if (req.body.password.length < 6) {
-      res.status(400).send({
-        message: "Aksi gagal! Password harus terdiri dari minimal 6 karakter!",
-      });
-      return;
-    }
-  
-    // Password complexity check
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?& _])[A-Za-z\d@$!%*?&_ ]/;
-    if (!passwordRegex.test(req.body.password)) {
-      res.status(400).send({
-        message: "Aksi gagal! Passowrd harus memiliki minimal satu huruf kecil, satu huruf besar, sati angka, dan satu karakter spesial!.",
-      });
-      return;
-    }
-  
-    next();
-  };
+  // Password validation
+  const password = req.body.password;
+
+  if (!password || password.trim() === "") {
+    return res.status(400).send({
+      message: "Aksi gagal! Password tidak boleh kosong!",
+    });
+  }
+
+  // Password length check
+  if (password.length < 6) {
+    return res.status(400).send({
+      message: "Aksi gagal! Password harus terdiri dari minimal 6 karakter!",
+    });
+  }
+
+  // Password complexity check
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?& _])[A-Za-z\d@$!%*?&_ ]/;
+  if (!passwordRegex.test(password)) {
+    return res.status(400).send({
+      message: "Aksi gagal! Password harus memiliki minimal satu huruf kecil, satu huruf besar, sati angka, dan satu karakter spesial!.",
+    });
+  }
+
+  next();
+};
 
 const verifySignUp = {
-  checkDuplicateUsernameOrEmail: checkDuplicateUsernameOrEmail,
-  checkRolesExisted: checkRolesExisted,
-  validatePassword: validatePassword,
+  checkDuplicateUsernameOrEmail,
+  checkRolesExisted,
+  validatePassword,
 };
 
 module.exports = verifySignUp;

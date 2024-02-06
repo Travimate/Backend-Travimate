@@ -1,37 +1,42 @@
-module.exports = (sequelize, Sequelize) => {
-  const User = sequelize.define("users", {
-    username: {
-      type: Sequelize.STRING,
+// 'use strict';
+
+const { Model } = require('sequelize');
+
+module.exports = (sequelize, DataTypes) => {
+  class User extends Model {
+    static associate(models) {
+      User.belongsToMany(models.Role, {
+        through: 'user_roles',
+        foreignKey: 'userId',
+        otherKey: 'roleId',
+        as: 'roles',
+      });
+    }
+  }
+
+  User.init(
+    {
+      username: DataTypes.STRING,
+      email: DataTypes.STRING,
+      password: DataTypes.STRING,
+      dob: DataTypes.DATE,
+      phone: DataTypes.STRING,
+      greeting: DataTypes.STRING,
+      resetToken: DataTypes.STRING,
+      resetTokenExpires: DataTypes.DATE,
+      emailVerified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      emailVerificationToken: DataTypes.STRING,
     },
-    email: {
-      type: Sequelize.STRING,
-    },
-    password: {
-      type: Sequelize.STRING,
-    },
-    dob: {
-      type: Sequelize.DATE,
-    },
-    phone: {
-      type: Sequelize.STRING,
-    },
-    greeting: {
-      type: Sequelize.STRING,
-    },
-    resetToken: {
-      type: Sequelize.STRING,
-    },
-    resetTokenExpires: {
-      type: Sequelize.DATE,
-    },
-    emailVerified: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: false,
-    },
-    emailVerificationToken: {
-      type: Sequelize.STRING,
-    },
-  });
+    {
+      sequelize,
+      modelName: 'User',
+    }
+  );
 
   return User;
 };
+
+

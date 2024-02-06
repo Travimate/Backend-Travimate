@@ -1,0 +1,56 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "root",
+    "database": "travi_development",
+    "host": "localhost",
+    "dialect": "postgres",
+    "migrationStorage": "sequelize",
+    "migrationStorageTableName": "sequelize_meta",
+    "seederStorage": "sequelize",
+    "seederStorageTableName": "sequelize_data",
+    "define": {
+      "timestamps": true,
+      "underscored": true
+    },
+    "migrations": [
+      "api/migrations/*.js"
+    ]
+  },
+  "test": {
+    "username": "postgres",
+    "password": "root",
+    "database": "travi_test",
+    "host": "localhost",
+    "dialect": "postgres",
+    "migrationStorage": "sequelize",
+    "migrationStorageTableName": "sequelize_meta",
+    "seederStorage": "sequelize",
+    "seederStorageTableName": "sequelize_data",
+    "define": {
+      "timestamps": true,
+      "underscored": true
+    },
+    "migrations": [
+      "api/migrations/*.js"
+    ]
+  },
+  "production": {
+    "username": "postgres",
+    "password": "root",
+    "database": "travi_production",
+    "host": "localhost",
+    "dialect": "postgres",
+    "migrationStorage": "sequelize",
+    "migrationStorageTableName": "sequelize_meta",
+    "seederStorage": "sequelize",
+    "seederStorageTableName": "sequelize_data",
+    "define": {
+      "timestamps": true,
+      "underscored": true
+    },
+    "migrations": [
+      "api/migrations/*.js"
+    ]
+  }
+}

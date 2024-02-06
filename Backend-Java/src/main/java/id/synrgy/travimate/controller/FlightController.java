@@ -26,13 +26,11 @@ public class FlightController {
     }
 
 
-    @Hidden
     @PostMapping("/flight")
     public ResponseEntity<Object> createFlight(@RequestBody List<FlightRequestDTO> flightRequestDTO){
         return ResponseHandler.generateResponseSuccess(flightService.createFlight(flightRequestDTO));
     }
 
-    @Hidden
     @PostMapping("/flight-data")
     public ResponseEntity<?> createFlightData(@RequestBody List<FlightDataRequestDTO> flightDataDTOList){
         return ResponseHandler.generateResponseSuccess(flightService.createFlightDataDTO(flightDataDTOList));
@@ -49,7 +47,6 @@ public class FlightController {
                 dateArr, flightClass, isAroundTrip));
     }
 
-    @Hidden
     @PostMapping("/edit-airline")
     public ResponseEntity<Object> createAirline(@RequestBody List<EditAirlineUrl> airline){
         return ResponseHandler.generateResponseSuccess(flightService.editAirlines(airline));

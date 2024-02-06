@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="AdditionalModuleElements">
+    <content url="file://$MODULE_DIR$/Backend-Java">
+      <sourceFolder url="file://$MODULE_DIR$/Backend-Java/.mvn/wrapper" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Backend-Java/src/main/java" isTestSource="false" />
+    </content>
+  </component>
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="4da0747f-0a4f-47a2-95e6-8416239de5db" />
+  </component>
+</module>

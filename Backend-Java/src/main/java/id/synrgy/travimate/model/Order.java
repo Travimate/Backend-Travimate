@@ -32,7 +32,7 @@ public class Order {
 
     private String bookedMail;
 
-    private String PNR;
+    private String pnrCode;
 
     @OneToMany(mappedBy = "order")
     private List<Flight> flightList;

@@ -29,6 +29,6 @@ public class Passenger {
     private Flight flight;
 
     @ManyToOne
-    @JoinColumn(name = "order")
+    @JoinColumn(name = "order_id")
     private Order order;
 }

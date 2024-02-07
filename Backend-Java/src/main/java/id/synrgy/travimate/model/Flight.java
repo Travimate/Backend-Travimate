@@ -56,4 +56,8 @@ public class Flight {
 
     private Integer stock;
 
+    @ManyToOne
+    @JoinColumn(name = "order")
+    private Order order;
+
 }

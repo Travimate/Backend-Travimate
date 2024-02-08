@@ -83,7 +83,7 @@ public class OrderServiceImpl implements OrderService{
         return passengers;
     }
 
-    private User findUserByID(UUID id){
+    private User findUserByID(Integer id){
         return userRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("user id = "+id));
     }

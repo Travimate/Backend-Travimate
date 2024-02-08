@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class OrderRequestDTO {
 
-    private UUID userId;
+    private Integer userId;
     private String bookedBy;
     private String bookedMail;
     private UUID flightDataID;

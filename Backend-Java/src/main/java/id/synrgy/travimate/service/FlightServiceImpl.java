@@ -104,6 +104,8 @@ public class FlightServiceImpl implements FlightService{
             return mapToDTO(flight);
         } catch (ResourceNotFoundException e) {
             return e.getMessage();
+        } catch (Exception e) {
+            return e.getMessage();
         }
     }
 
@@ -118,34 +120,45 @@ public class FlightServiceImpl implements FlightService{
 
 //    @Override
     public Object createFlightData(FlightDataRequestDTO flightDataRequest) {
+
+
+        FlightData flightData = new FlightData();
+        Set<Route> routeSet = new LinkedHashSet<>();
+
         String dep = flightDataRequest.getDep();
         String arr = flightDataRequest.getArr();
         Date date = flightDataRequest.getDate();
         String connectingAirport = flightDataRequest.getConnectingAirport();
         List<FlightData> flightDataDirectOnDay;
-        try{
+
+//        try{
+//
+//        } catch (ResourceNotFoundException e){
+//            return e.getMessage();
+//        }
+
+        try {
             flightDataDirectOnDay = flightDataRepository.findDirectFlightsByDepartureAndArrival(
                     findAirportByIATACode(dep), findAirportByIATACode(arr), date);
-        } catch (ResourceNotFoundException e){
+            if (flightDataDirectOnDay.isEmpty()){
+                createNewFlightData(flightDataRequest, flightData);
+                routeSet.add(createRoutes(flightDataRequest.getAirline(), dep, arr, null, flightData));
+                flightData.setRouteSet(routeSet);
+                flightDataRepository.save(flightData);
+                return mapToDTO(flightData, dep, arr);
+            } else if( flightDataDirectOnDay.size()==1 && connectingAirport!=null){
+                createNewFlightData(flightDataRequest, flightData);
+                routeSet.add(createRoutes(flightDataRequest.getAirline(), dep, arr, connectingAirport, flightData));
+                flightData.setRouteSet(routeSet);
+                flightDataRepository.save(flightData);
+                return mapToDTO(flightData, dep, arr);
+            } else {
+                return String.format("Data dengan dep, arr, dan tanggal: %s, %s, %s SUDAH ADA.", dep, arr, date);
+            }
+        } catch (ResourceNotFoundException e) {
             return e.getMessage();
-        }
-
-        FlightData flightData = new FlightData();
-        Set<Route> routeSet = new LinkedHashSet<>();
-        if (flightDataDirectOnDay.isEmpty()){
-            createNewFlightData(flightDataRequest, flightData);
-            routeSet.add(createRoutes(flightDataRequest.getAirline(), dep, arr, null, flightData));
-            flightData.setRouteSet(routeSet);
-            flightDataRepository.save(flightData);
-            return mapToDTO(flightData, dep, arr);
-        } else if( flightDataDirectOnDay.size()==1 && connectingAirport!=null){
-            createNewFlightData(flightDataRequest, flightData);
-            routeSet.add(createRoutes(flightDataRequest.getAirline(), dep, arr, connectingAirport, flightData));
-            flightData.setRouteSet(routeSet);
-            flightDataRepository.save(flightData);
-            return mapToDTO(flightData, dep, arr);
-        } else {
-            return String.format("Data dengan dep, arr, dan tanggal: %s, %s, %s SUDAH ADA.", dep, arr, date);
+        } catch (Exception e) {
+            return e.getMessage();
         }
     }
     private void createNewFlightData(FlightDataRequestDTO requestDTO, FlightData flightData) {

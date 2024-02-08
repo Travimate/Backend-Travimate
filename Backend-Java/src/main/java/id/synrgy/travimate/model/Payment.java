@@ -1,24 +1,17 @@
 package id.synrgy.travimate.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "payment")
+public class Payment {
 
-    @Id
-    private UUID id;
-    private String username;
-    private String email;
 
 }

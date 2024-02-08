@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.UUID;
@@ -28,7 +29,7 @@ public class FlightDTO {
 
     private Flight.FlightClass flightClass;
 
-    private Date dof;
+    private LocalDate dof;
 
     private LocalTime departure_time;
 

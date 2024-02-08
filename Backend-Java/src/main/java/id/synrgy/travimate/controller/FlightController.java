@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -38,8 +39,8 @@ public class FlightController {
     @GetMapping("/find-journey")
     public ResponseEntity<?> findJourney(@RequestParam String dep,
                                          @RequestParam String arr,
-                                         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateDep,
-                                         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateArr,
+                                         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateDep,
+                                         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateArr,
                                          @RequestParam String flightClass,
                                          @RequestParam(required = false) Boolean isAroundTrip){
         return ResponseHandler.generateResponseSuccess(flightService.searchFlightResult(dep, arr, dateDep,

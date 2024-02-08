@@ -4,7 +4,6 @@ import id.synrgy.travimate.dto.request.EditAirlineUrl;
 import id.synrgy.travimate.dto.request.FlightDataRequestDTO;
 import id.synrgy.travimate.dto.request.FlightRequestDTO;
 import id.synrgy.travimate.dto.response.*;
-import id.synrgy.travimate.exception.ExistingResourceFoundException;
 import id.synrgy.travimate.exception.ResourceNotFoundException;
 import id.synrgy.travimate.model.*;
 import id.synrgy.travimate.repository.*;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -47,27 +47,6 @@ public class FlightServiceImpl implements FlightService{
         this.baseFareRepository = baseFareRepository;
     }
 
-//    @Override
-//    public FlightDTO createFlight(String dep, String arr, String airline, int flightNumber,
-//                                  String flightClass, Date dof, LocalTime depTime,
-//                                  LocalTime arrTime, Integer stock) {
-//        Flight flight = new Flight();
-//        flight.setFlightNumber(airline.toUpperCase()+flightNumber);
-//        flight.setDep(findAirportByIATACode(dep));
-//        flight.setArr(findAirportByIATACode(arr));
-//        flight.setAirline(findAirlineByIATACode(airline));
-//        flight.setFlightClass(Flight.FlightClass.valueOf(flightClass.toUpperCase()));
-//        flight.setDof(dof);
-//        flight.setDeparture_time(depTime);
-//        flight.setArrival_time(arrTime);
-//
-//        Duration duration = Duration.between(depTime, arrTime);
-//        LocalTime flightTime = LocalTime.MIDNIGHT.plus(duration);
-//        flight.setFlight_time(flightTime);
-//        flight.setStock(stock);
-//        flightRepository.save(flight);
-//        return mapToDTO(flight);
-//    }
 
     @Override
     public List<Object> createFlight(List<FlightRequestDTO> flightRequestDTOList){
@@ -118,35 +97,28 @@ public class FlightServiceImpl implements FlightService{
         return flightDTOList;
     }
 
-//    @Override
     public Object createFlightData(FlightDataRequestDTO flightDataRequest) {
-
 
         FlightData flightData = new FlightData();
         Set<Route> routeSet = new LinkedHashSet<>();
 
         String dep = flightDataRequest.getDep();
         String arr = flightDataRequest.getArr();
-        Date date = flightDataRequest.getDate();
+        LocalDate date = flightDataRequest.getDate();
         String connectingAirport = flightDataRequest.getConnectingAirport();
-        List<FlightData> flightDataDirectOnDay;
-
-//        try{
-//
-//        } catch (ResourceNotFoundException e){
-//            return e.getMessage();
-//        }
+        Optional<FlightData> fd = null;
 
         try {
-            flightDataDirectOnDay = flightDataRepository.findDirectFlightsByDepartureAndArrival(
+            if(connectingAirport!=null){
+                fd = flightDataRepository.findFlightsByDepartureAndArrivalAndConnecting(
+                        findAirportByIATACode(dep), findAirportByIATACode(arr), findAirportByIATACode(connectingAirport), date
+                );
+            } else {
+                fd = flightDataRepository.findDirectFlightsByDepartureAndArrival(
                     findAirportByIATACode(dep), findAirportByIATACode(arr), date);
-            if (flightDataDirectOnDay.isEmpty()){
-                createNewFlightData(flightDataRequest, flightData);
-                routeSet.add(createRoutes(flightDataRequest.getAirline(), dep, arr, null, flightData));
-                flightData.setRouteSet(routeSet);
-                flightDataRepository.save(flightData);
-                return mapToDTO(flightData, dep, arr);
-            } else if( flightDataDirectOnDay.size()==1 && connectingAirport!=null){
+            }
+
+            if(fd.isEmpty()){
                 createNewFlightData(flightDataRequest, flightData);
                 routeSet.add(createRoutes(flightDataRequest.getAirline(), dep, arr, connectingAirport, flightData));
                 flightData.setRouteSet(routeSet);
@@ -164,6 +136,9 @@ public class FlightServiceImpl implements FlightService{
     private void createNewFlightData(FlightDataRequestDTO requestDTO, FlightData flightData) {
         flightData.setOperated_airline(findAirlineByIATACode(requestDTO.getAirline()));
         flightData.setDeparture(findAirportByIATACode(requestDTO.getDep()));
+        if(requestDTO.getConnectingAirport()!=null){
+            flightData.setConnecting(findAirportByIATACode(requestDTO.getConnectingAirport()));
+        }
         flightData.setArrival(findAirportByIATACode(requestDTO.getArr()));
         flightData.setFlight_date(requestDTO.getDate());
         BaseFare baseFare = createBaseFare(requestDTO.getAdultFare(), requestDTO.getChildFare(),
@@ -201,13 +176,12 @@ public class FlightServiceImpl implements FlightService{
                     findAirportByIATACode(connectingAirport),
                     findAirlineByIATACode(airline));
         }
-        System.out.println("Optional route = "+ existingRoute.orElse(null));
         if (existingRoute.isEmpty()) {
             Route route = createRoute(airline, dep, arr, flightData);
+            System.out.println("connecting = "+connectingAirport);
             if (connectingAirport != null) {
                 route.setConnecting_airport(findAirportByIATACode(connectingAirport));
             }
-            System.out.println("\n Route = "+route);
             routeRepository.save(route);
             return route;
         } else {
@@ -227,10 +201,9 @@ public class FlightServiceImpl implements FlightService{
         return route;
     }
 
-
     @Override
-    public Set<FlightSearchDTO> searchFlightResult(String dep, String arr, Date dateDep,
-                                              Date dateArr, String flightClass, Boolean isAroundTrip) {
+    public Set<FlightSearchDTO> searchFlightResult(String dep, String arr, LocalDate dateDep,
+                                              LocalDate dateArr, String flightClass, Boolean isAroundTrip) {
         Set<FlightSearchDTO> flightSearchDTOSet = new LinkedHashSet<>();
 
         FlightSearchDTO flightSearchDTO = new FlightSearchDTO();
@@ -253,12 +226,12 @@ public class FlightServiceImpl implements FlightService{
         return flightSearchDTOSet;
     }
 
-    private List<JourneyDTO> findJourney(String dep, String arr, Date dateOfFlight, String flightClass) {
+    private List<JourneyDTO> findJourney(String dep, String arr, LocalDate dateOfFlight, String flightClass) {
         List<JourneyDTO> journeyDTOList = new ArrayList<>();
         Set<FlightData> flightDataSet = new LinkedHashSet<>(flightDataRepository
                 .findFlightDataByDepartureArrivalAndDate(
                         findAirportByIATACode(dep), findAirportByIATACode(arr), dateOfFlight));
-        flightDataSet.forEach(System.out::println);
+        flightDataSet.forEach(flightData -> System.out.println("flight data = "+flightData));
         for(FlightData flightData : flightDataSet){
             List<RouteDTO> routeDTOSet = flightData.getRouteSet().stream()
                     .flatMap(route -> mapToDTO(route, dep, arr, dateOfFlight,
@@ -342,7 +315,7 @@ public class FlightServiceImpl implements FlightService{
         }
     }
 
-    public List<Flight> findFlight(String dep, String arr, Date dof, String airline, String flightClass){
+    public List<Flight> findFlight(String dep, String arr, LocalDate dof, String airline, String flightClass){
         if(dep.isEmpty() || arr.isEmpty() || airline.isEmpty()){
             return null;
         }
@@ -350,7 +323,7 @@ public class FlightServiceImpl implements FlightService{
     }
 
     private List<RouteDTO> mapToDTO(Route route, String dep, String arr,
-                              Date dateOfFlight, Boolean isDirect, String flightClass) {
+                              LocalDate dateOfFlight, Boolean isDirect, String flightClass) {
 
         String airline = route.getOperated_airline().getIata_code();
         String connectingAirport = null;
@@ -438,6 +411,8 @@ public class FlightServiceImpl implements FlightService{
         flightDataDTO.setId(flightData.getId());
         flightDataDTO.setDeparture(flightData.getDeparture());
         flightDataDTO.setArrival(flightData.getArrival());
+        flightDataDTO.setConnecting(flightData.getConnecting());
+        flightDataDTO.setDate(flightData.getFlight_date());
         flightDataDTO.setBaseFare(flightData.getBaseFare());
         flightDataDTO.setFlightClass(flightData.getFlightClass());
         flightDataDTO.setOperated_airline(flightData.getOperated_airline());

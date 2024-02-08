@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Setter
@@ -20,7 +21,8 @@ public class FlightDataRequestDTO {
     private Boolean sameAsAdult;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private LocalDate date;
+
     private String flightClass;
     private String connectingAirport;
     private Boolean isDirect;

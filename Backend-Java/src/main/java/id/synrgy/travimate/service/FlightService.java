@@ -11,6 +11,7 @@ import id.synrgy.travimate.model.Airport;
 import id.synrgy.travimate.model.FlightData;
 import id.synrgy.travimate.model.Route;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +37,7 @@ public interface FlightService {
 //                           int flightNumber, String flightClass, Date dof, LocalTime depTime,
 //                           LocalTime arrTime, Integer stock);
 
-    Set<FlightSearchDTO> searchFlightResult(String dep, String arr, Date dateDep, Date dateArr, String flightClass,
+    Set<FlightSearchDTO> searchFlightResult(String dep, String arr, LocalDate dateDep, LocalDate dateArr, String flightClass,
                                             Boolean isAroundTrip);
 
     List<Object> createFlight(List<FlightRequestDTO> flightRequestDTOList);

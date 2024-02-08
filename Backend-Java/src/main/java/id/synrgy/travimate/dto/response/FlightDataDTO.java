@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,6 +18,10 @@ public class FlightDataDTO {
     private Airport departure;
 
     private Airport arrival;
+
+    private Airport connecting;
+
+    private LocalDate date;
 
     private Airline operated_airline;
 

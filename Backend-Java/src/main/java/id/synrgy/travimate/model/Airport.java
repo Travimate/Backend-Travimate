@@ -20,11 +20,4 @@ public class Airport {
 
     private String country;
 
-//    private double latitude;
-//
-//    private double longitude;
-//
-//    private float utc;
-//
-//    private String time_zone;
 }

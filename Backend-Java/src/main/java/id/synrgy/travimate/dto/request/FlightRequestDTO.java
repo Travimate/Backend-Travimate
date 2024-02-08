@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.time.LocalTime;
@@ -20,8 +21,8 @@ public class FlightRequestDTO {
     private int flightNumber;
     private String flightClass;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date dof;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dof;
 
     @JsonFormat(pattern = "HH.mm")
     private String depTime;

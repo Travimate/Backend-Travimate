@@ -7,7 +7,9 @@ import id.synrgy.travimate.model.Flight;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +39,8 @@ public class JourneyDTO {
 
     private List<RouteDTO> route;
 
-    private Date dof;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dof;
 
     private LocalTime departure_time;
 

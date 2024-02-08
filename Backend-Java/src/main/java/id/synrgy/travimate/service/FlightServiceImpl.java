@@ -104,6 +104,7 @@ public class FlightServiceImpl implements FlightService{
 
         String dep = flightDataRequest.getDep();
         String arr = flightDataRequest.getArr();
+        String ope = flightDataRequest.getAirline();
         LocalDate date = flightDataRequest.getDate();
         String connectingAirport = flightDataRequest.getConnectingAirport();
         Optional<FlightData> fd = null;
@@ -111,11 +112,16 @@ public class FlightServiceImpl implements FlightService{
         try {
             if(connectingAirport!=null){
                 fd = flightDataRepository.findFlightsByDepartureAndArrivalAndConnecting(
-                        findAirportByIATACode(dep), findAirportByIATACode(arr), findAirportByIATACode(connectingAirport), date
+                        findAirportByIATACode(dep),
+                        findAirportByIATACode(arr),
+                        findAirportByIATACode(connectingAirport),
+                        findAirlineByIATACode(ope), date
                 );
             } else {
                 fd = flightDataRepository.findDirectFlightsByDepartureAndArrival(
-                    findAirportByIATACode(dep), findAirportByIATACode(arr), date);
+                        findAirportByIATACode(dep),
+                        findAirportByIATACode(arr),
+                        findAirlineByIATACode(ope), date);
             }
 
             if(fd.isEmpty()){

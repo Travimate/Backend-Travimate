@@ -28,13 +28,16 @@ public interface FlightDataRepository extends JpaRepository<FlightData, UUID> {
     @Query("SELECT fd FROM FlightData fd " +
             "JOIN fd.departure dep " +
             "JOIN fd.arrival arr " +
+            "JOIN fd.operated_airline ope " +
             "WHERE dep = :departureAirport " +
             "AND arr = :arrivalAirport " +
+            "AND ope = :operatedAirline " +
             "AND fd.isDirect = true " +
             "AND fd.flight_date = :flightDate")
     Optional<FlightData> findDirectFlightsByDepartureAndArrival(
             @Param("departureAirport") Airport departureAirport,
             @Param("arrivalAirport") Airport arrivalAirport,
+            @Param("operatedAirline") Airline operatedAirline,
             @Param("flightDate") LocalDate flightDate
     );
 
@@ -42,14 +45,17 @@ public interface FlightDataRepository extends JpaRepository<FlightData, UUID> {
             "JOIN fd.departure dep " +
             "JOIN fd.arrival arr " +
             "JOIN fd.connecting con " +
+            "JOIN fd.operated_airline ope " +
             "WHERE dep = :departureAirport " +
             "AND arr = :arrivalAirport " +
             "AND con = :connectingAirport " +
+            "AND ope = :operatedAirline " +
             "AND fd.flight_date = :flightDate")
     Optional<FlightData> findFlightsByDepartureAndArrivalAndConnecting(
             @Param("departureAirport") Airport departureAirport,
             @Param("arrivalAirport") Airport arrivalAirport,
             @Param("connectingAirport") Airport connectingAirport,
+            @Param("operatedAirline") Airline operatedAirline,
             @Param("flightDate") LocalDate flightDate
     );
 

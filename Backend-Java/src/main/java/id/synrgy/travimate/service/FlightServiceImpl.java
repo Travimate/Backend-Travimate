@@ -253,7 +253,16 @@ public class FlightServiceImpl implements FlightService{
             }
         }
 
-        journeyDTOList.sort(Comparator.comparingLong(dto -> dto.getBaseFare().getAdultBaseFare()));
+        journeyDTOList.sort((journey1, journey2) -> {
+            int compareBaseFare = Long.compare(journey1.getBaseFare().getAdultBaseFare(), journey2.getBaseFare().getAdultBaseFare());
+            if (compareBaseFare != 0) {
+                return compareBaseFare;
+            } else {
+                return Integer.compare(journey1.getStops(), journey2.getStops());
+            }
+        });
+
+
         return journeyDTOList;
     }
     private void loopJourney(JourneyDTO journey, List<RouteDTO> routeDTOSet){

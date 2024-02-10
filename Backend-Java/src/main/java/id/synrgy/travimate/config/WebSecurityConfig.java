@@ -52,13 +52,13 @@ public class WebSecurityConfig {
                         auth
 //                            .requestMatchers("/api/v1/order/**").hasRole("user")
 //                            .requestMatchers("/api/v1/order/**").permitAll()
-                            .requestMatchers("/api/v1/flight/**").permitAll()
-                            .requestMatchers("/api/v1/payment/**").permitAll()
-
-                            .requestMatchers("/api-docs/**").permitAll()
-                            .requestMatchers("/swagger-ui/**").permitAll()
-                            .requestMatchers("/v3/api-docs/**").permitAll()
-                            .requestMatchers("/swagger-resources/**").permitAll()
+//                            .requestMatchers("/api/v1/flight/**").permitAll()
+//                            .requestMatchers("/api/v1/payment/**").permitAll()
+//
+//                            .requestMatchers("/api-docs/**").permitAll()
+//                            .requestMatchers("/swagger-ui/**").permitAll()
+//                            .requestMatchers("/v3/api-docs/**").permitAll()
+//                            .requestMatchers("/swagger-resources/**").permitAll()
                             .anyRequest().authenticated()
                         );
 

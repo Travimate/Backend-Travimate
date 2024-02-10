@@ -49,7 +49,7 @@ public class JwtUtils {
 
     public boolean validateJwtToken(String token, HttpServletResponse response) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(jwtSecret.getBytes("UTF-8")).parseClaimsJws(token);
             return true;
         } catch (SignatureException e) {
             // Invalid signature
@@ -66,6 +66,8 @@ public class JwtUtils {
         } catch (IllegalArgumentException e) {
             // Token is empty or null
             handleJwtError(response, "JWT token is empty or null: " + e.getMessage());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
         return false;
     }

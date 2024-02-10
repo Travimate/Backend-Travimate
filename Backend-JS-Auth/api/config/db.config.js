@@ -18,7 +18,7 @@ module.exports = {
     USER: "fajar",
     PASSWORD: "123",
     PORT:"5432",
-    DB: "travimate_test",
+    DB: "travimate",
     dialect: "postgres",
     pool: {
       max: 5,
@@ -32,7 +32,7 @@ module.exports = {
     USER: "fajar",
     PASSWORD: "123",
     PORT:"5432",
-    DB: "travimate_production",
+    DB: "travimate",
     dialect: "postgres",
     pool: {
       max: 5,

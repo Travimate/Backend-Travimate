@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
-
 @Entity
 @Getter
 @Setter
@@ -19,6 +17,7 @@ public class Airline {
 
     private String imageUrl;
 
-//    @OneToMany(mappedBy = "airline")
-//    private Set<Flight> flights;
+    private int cabinBaggage;
+
+    private int baggage;
 }

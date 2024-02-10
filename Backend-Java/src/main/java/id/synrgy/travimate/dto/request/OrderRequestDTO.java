@@ -18,5 +18,5 @@ public class OrderRequestDTO {
     private String bookedMail;
     private UUID flightDataID;
     private List<UUID> flightID;
-    private List<Passenger> passengerList;
+    private List<PassengerRequestDTO> passengerList;
 }

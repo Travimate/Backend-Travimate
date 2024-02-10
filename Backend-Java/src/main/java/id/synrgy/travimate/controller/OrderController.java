@@ -3,15 +3,18 @@ package id.synrgy.travimate.controller;
 import id.synrgy.travimate.dto.request.OrderRequestDTO;
 import id.synrgy.travimate.dto.response.ResponseHandler;
 import id.synrgy.travimate.service.OrderService;
+import id.synrgy.travimate.service.ReportService;
 import io.swagger.v3.oas.annotations.Hidden;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.security.Principal;
+import java.util.UUID;
 
 @Hidden
 @RestController
@@ -20,13 +23,36 @@ public class OrderController {
 
 
     private final OrderService orderService;
+    private final ReportService reportService;
     @Autowired
-    OrderController(OrderService orderService){
+    OrderController(OrderService orderService,
+                    ReportService reportService){
         this.orderService = orderService;
+        this.reportService = reportService;
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Object> createOrder(@RequestBody OrderRequestDTO orderDTO){
-        return ResponseHandler.generateResponseSuccess(orderService.createOrder(orderDTO));
+    public ResponseEntity<Object> placeOrder(@RequestBody OrderRequestDTO orderDTO,
+                                             Principal principal){
+        return ResponseHandler.generateResponseSuccess(
+                orderService.placeOrder(principal.getName(),
+                orderDTO));
+    }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<Object> cancelOrder(@RequestParam UUID orderID){
+        return ResponseHandler.generateResponseSuccess(orderService.cancelOrder(orderID));
+    }
+
+    @GetMapping("/e-ticket")
+    public ResponseEntity<byte[]> generateReport(@RequestParam UUID orderID,
+                                                 @RequestParam String format) throws JRException {
+        byte[] reportBytes = reportService
+                .generateReport(orderID, format);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "report." + format);
+
+        return new ResponseEntity<>(reportBytes, headers, HttpStatus.OK);
     }
 }

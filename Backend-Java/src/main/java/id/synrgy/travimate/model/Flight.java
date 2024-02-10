@@ -6,10 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Date;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -24,7 +22,7 @@ public class Flight {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID flightID;
 
     private String flightNumber;
 
@@ -57,8 +55,7 @@ public class Flight {
 
     private Integer stock;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @ManyToMany(mappedBy = "flightList")
+    private List<Orders> orders;
 
 }

@@ -25,11 +25,21 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(jwtSecret));
     }
     public String getUsername(String jwt) {
-        return  Jwts.parserBuilder()
-                .setSigningKey(key()).build()
+//        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwt).getBody();
+//        return claims.get("id").toString();
+        return Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
                 .parseClaimsJws(jwt)
                 .getBody()
-                .getSubject();
+                .get("id")
+                .toString();
+
+//        return  Jwts.parserBuilder()
+//                .setSigningKey(key()).build()
+//                .parseClaimsJws(jwt)
+//                .getBody()
+//                .getSubject();
     }
 
     public boolean validateJwtToken(String token, HttpServletResponse response) {

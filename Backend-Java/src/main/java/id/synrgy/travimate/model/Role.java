@@ -18,7 +18,7 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private RoleName name;
 
-    @ManyToMany(mappedBy = "roles")
-    private List<Users> users;
+    @ManyToMany(mappedBy = "roleId")
+    private List<Users> userId;
 
 }

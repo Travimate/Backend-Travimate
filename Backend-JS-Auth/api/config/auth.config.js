@@ -1,3 +1,3 @@
 module.exports = {
-  secret: "travimatesecretkey",
+  secret: "travimatesecretkeyforbackendauth",
 };

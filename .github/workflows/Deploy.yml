@@ -37,7 +37,6 @@ jobs:
             cd .ssh/Backend-Travimate/Backend-JS-Auth
             npm install
             npm update
-	    npm run sequelize db:drop
             npm start > /dev/null 2>&1 &
 
       - name: Kill and Run new JAR file in VM

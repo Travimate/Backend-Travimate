@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService{
         Orders orders = new Orders();
         orders.setBookingID(generateBookingId());
         orders.setPnrCode(generatePNR());
-        orders.setUser(userService.findByUsername(username));
+        orders.setUsers(userService.findByUsername(username));
         orders.setBookedBy(orderDTO.getBookedBy());
         orders.setBookedMail(orderDTO.getBookedMail());
         orders.setBookedDate(LocalDate.now());

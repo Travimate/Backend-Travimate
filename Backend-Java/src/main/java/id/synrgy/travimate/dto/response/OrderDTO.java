@@ -1,6 +1,6 @@
 package id.synrgy.travimate.dto.response;
 
-import id.synrgy.travimate.model.User;
+import id.synrgy.travimate.model.Users;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,7 +16,7 @@ public class OrderDTO {
 
     private UUID orderID;
 
-    private User user;
+    private Users users;
 
     private String bookingID;
 

@@ -22,7 +22,7 @@ public class Orders {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users users;
 
     private String bookingID;
 

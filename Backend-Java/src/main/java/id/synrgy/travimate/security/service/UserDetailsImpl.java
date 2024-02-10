@@ -1,6 +1,6 @@
 package id.synrgy.travimate.security.service;
 
-import id.synrgy.travimate.model.User;
+import id.synrgy.travimate.model.Users;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,12 +22,12 @@ public class UserDetailsImpl implements UserDetails{
         this.authorities = authorities;
     }
 
-    public static UserDetails build(User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream()
+    public static UserDetails build(Users users) {
+        List<GrantedAuthority> authorities = users.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
 
-        return new UserDetailsImpl(user.getUsername(), user.getPassword(), authorities);
+        return new UserDetailsImpl(users.getUsername(), users.getPassword(), authorities);
     }
 
     @Override

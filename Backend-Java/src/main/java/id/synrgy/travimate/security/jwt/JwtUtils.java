@@ -25,7 +25,7 @@ public class JwtUtils {
     private Key key(){
         return Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(jwtSecret));
     }
-    public String getUsername(String jwt) {
+    public String getId(String jwt) {
 //        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwt).getBody();
 //        return claims.get("id").toString();
         try {

@@ -25,32 +25,32 @@ jobs:
             cd Backend-Java
             mvn clean install
 
-      - name: Run Node App
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.PORT }}
-          script: |
-            killall node || true
-            cd .ssh/Backend-Travimate/Backend-JS-Auth
-            npm install
-            npm update
-            npm start > /dev/null 2>&1 &
+      # - name: Run Node App
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     key: ${{ secrets.SSH_KEY }}
+      #     port: ${{ secrets.PORT }}
+      #     script: |
+      #       killall node || true
+      #       cd .ssh/Backend-Travimate/Backend-JS-Auth
+      #       npm install
+      #       npm update
+      #       npm start > /dev/null 2>&1 &
 
-      - name: Kill and Run new JAR file in VM
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.PORT }}
-          script: |
-            trap "echo 'Received SIGTERM signal, ignoring...'" TERM
-            pkill -f Travimate-0.0.1-SNAPSHOT.jar || true
-            nohup java -jar .ssh/Backend-Travimate/Backend-Java/target/Travimate-0.0.1-SNAPSHOT.jar  > /dev/null 2>&1 &
-            trap - TERM
+      # - name: Kill and Run new JAR file in VM
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     key: ${{ secrets.SSH_KEY }}
+      #     port: ${{ secrets.PORT }}
+      #     script: |
+      #       trap "echo 'Received SIGTERM signal, ignoring...'" TERM
+      #       pkill -f Travimate-0.0.1-SNAPSHOT.jar || true
+      #       nohup java -jar .ssh/Backend-Travimate/Backend-Java/target/Travimate-0.0.1-SNAPSHOT.jar  > /dev/null 2>&1 &
+      #       trap - TERM
 
       # Example of using the output
       - id: 'test'

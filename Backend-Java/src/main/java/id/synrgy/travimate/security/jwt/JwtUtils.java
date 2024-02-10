@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.security.Key;
 
 @Component
@@ -27,13 +28,17 @@ public class JwtUtils {
     public String getUsername(String jwt) {
 //        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwt).getBody();
 //        return claims.get("id").toString();
-        return Jwts.parserBuilder()
-                .setSigningKey(key())
-                .build()
-                .parseClaimsJws(jwt)
-                .getBody()
-                .get("id")
-                .toString();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(jwtSecret.getBytes("UTF-8"))
+                    .build()
+                    .parseClaimsJws(jwt)
+                    .getBody()
+                    .get("id")
+                    .toString();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
 
 //        return  Jwts.parserBuilder()
 //                .setSigningKey(key()).build()

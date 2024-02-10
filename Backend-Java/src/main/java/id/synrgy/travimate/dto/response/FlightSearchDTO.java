@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class FlightSearchDTO {
 
     private String arrival;
 
-    private Date dateOfFlight;
+    private LocalDate dateOfFlight;
 
     private String dataInfo;
 

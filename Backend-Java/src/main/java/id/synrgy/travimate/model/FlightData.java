@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -28,8 +30,14 @@ public class FlightData {
     private Airport arrival;
 
     @ManyToOne
+    @JoinColumn(name = "connecting_airport")
+    private Airport connecting;
+
+    @ManyToOne
     @JoinColumn(name = "operated_airline", nullable = false)
     private Airline operated_airline;
+
+    private LocalDate flight_date;
 
     private Integer stops;
 

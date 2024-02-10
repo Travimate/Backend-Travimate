@@ -12,7 +12,6 @@ const seedersPath = path.join(__dirname, "api", "seeders");
 
 // Check if the database exists
 try {
-  execSync(`npx sequelize db:drop --config "${sequelizeConfigPath}"`);
   execSync(`npx sequelize db:create --config "${sequelizeConfigPath}"`);
   console.log("Database created successfully.");
   // Run migrations if needed

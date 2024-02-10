@@ -14,6 +14,9 @@ import java.util.UUID;
 @Table(name = "passanger")
 public class Passenger {
 
+    public enum PassengerType { ADULT, CHILD }
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -22,7 +25,10 @@ public class Passenger {
     private String firstName;
     private String lastName;
     private int national_id;
-    private Long ticketId;
+    private String ticketId;
+
+    @Enumerated(EnumType.STRING)
+    private Passenger.PassengerType type;
 
     @ManyToOne
     @JoinColumn(name = "flight_id")
@@ -30,5 +36,5 @@ public class Passenger {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Order order;
+    private Orders orders;
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="flight-data" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="073e9753-f8ed-4bf1-9511-ae7b0f41f448">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="airlineName" class="java.lang.String"/>
+	<field name="flightClass" class="java.lang.String"/>
+	<field name="imageUrl" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="140" splitType="Stretch">
+			<image>
+				<reportElement x="30" y="20" width="80" height="82" uuid="002d3718-0a6a-41e8-b8ff-f7273c038cfd"/>
+				<imageExpression><![CDATA[$F{imageUrl}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="140" y="30" width="230" height="30" uuid="82ddb62c-c10b-4524-9f9a-30dbc40e04d8"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{airlineName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="70" width="230" height="30" uuid="c7f966b5-7f83-481a-8f60-024b7f02695d"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{flightClass}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

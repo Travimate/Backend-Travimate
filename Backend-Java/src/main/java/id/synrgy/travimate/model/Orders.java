@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,7 +14,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "orders")
-public class Order {
+public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,18 +28,30 @@ public class Order {
 
     private String bookedBy;
 
-    private Date bookedDate;
+    private LocalDate bookedDate;
 
     private String bookedMail;
 
     private String pnrCode;
 
-    @OneToMany(mappedBy = "order")
+    private long amount;
+
+    @ManyToMany
+    @JoinTable(
+            name = "order_flight",
+            joinColumns = @JoinColumn(name = "orders_id"),
+            inverseJoinColumns = @JoinColumn(name = "flight_id")
+    )
     private List<Flight> flightList;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "orders")
     private List<Passenger> passengerList;
 
     private Boolean completed;
 
+    private boolean paid;
+
+    @ManyToOne
+    @JoinColumn(name = "payment")
+    private Payment payment;
 }

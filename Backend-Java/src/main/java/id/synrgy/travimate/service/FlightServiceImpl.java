@@ -433,9 +433,10 @@ public class FlightServiceImpl implements FlightService{
         return flightDataDTO;
     }
 
-    private FlightDTO mapToDTO(Flight flight){
+    @Override
+    public FlightDTO mapToDTO(Flight flight){
         FlightDTO flightDTO = new FlightDTO();
-        flightDTO.setId(flight.getId());
+        flightDTO.setFlightID(flight.getFlightID());
         flightDTO.setFlightNumber(flight.getFlightNumber());
         flightDTO.setDep(flight.getDep());
         flightDTO.setArr(flight.getArr());
@@ -447,12 +448,6 @@ public class FlightServiceImpl implements FlightService{
         flightDTO.setFlight_time(flight.getFlight_time());
         flightDTO.setStock(flight.getStock());
         return flightDTO;
-    }
-
-    @Override
-    public Airport createAirport(Airport airport) {
-        airportRepository.save(airport);
-        return airport;
     }
 
     @Override
@@ -492,8 +487,15 @@ public class FlightServiceImpl implements FlightService{
     }
 
     @Override
-    public Optional<Route> findRouteById(String id) {
-        return routeRepository.findById(id.toUpperCase());
+    public FlightData findFlightDataByID(UUID id){
+        return flightDataRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(id));
+    }
+
+    @Override
+    public Flight findFlightByID(UUID id){
+        return flightRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(id));
     }
 
 }

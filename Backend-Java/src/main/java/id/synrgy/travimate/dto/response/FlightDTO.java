@@ -9,7 +9,6 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.UUID;
 
 @Setter
@@ -17,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class FlightDTO {
 
-    private UUID id;
+    private UUID flightID;
 
     private String flightNumber;
 

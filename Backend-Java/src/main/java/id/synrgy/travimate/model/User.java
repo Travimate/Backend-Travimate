@@ -1,13 +1,11 @@
 package id.synrgy.travimate.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -16,9 +14,15 @@ import java.util.UUID;
 @Table(name = "users")
 public class User {
 
+    public enum Roles { admin, user }
+
     @Id
     private Integer id;
     private String username;
     private String email;
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private List<Roles> roles;
 
 }

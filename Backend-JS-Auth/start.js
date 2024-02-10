@@ -34,6 +34,23 @@ try {
   }
 } catch (error) {
   console.log("Database already exists.");
+  try {
+    execSync(
+      `npx sequelize db:migrate --config "${sequelizeConfigPath}" --migrations-path "${migrationsPath}"`
+    );
+    console.log("Migrations executed successfully.");
+    try {
+      execSync(
+        `npx sequelize db:seed:all --config "${sequelizeConfigPath}" --seeders-path "${seedersPath}"`
+      );
+      console.log("Seeders executed successfully.");
+    } catch (error) {
+      console.log("Seeders not executed.");
+    }
+  } catch (error) {
+    console.error("Error running migrations:", error.stderr.toString());
+    process.exit(1); // Exit the process with an error code
+  }
 }
 
 require("./api/index.js");
@@ -76,4 +93,3 @@ require("./api/index.js");
 // }
 
 // Start your application using nodemon
-

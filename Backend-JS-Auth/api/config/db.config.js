@@ -1,10 +1,10 @@
 module.exports = {
   development: {
     HOST: "localhost",
-    USER: "postgres",
-    // PORT:'',
-    PASSWORD: "root",
-    DB: "travi_development",
+    USER: "fajar",
+    PORT:"5432",
+    PASSWORD: "123",
+    DB: "travimate",
     dialect: "postgres",
     pool: {
       max: 5,
@@ -15,10 +15,10 @@ module.exports = {
   },
   test: {
     HOST: "localhost",
-    USER: "postgres",
-    PASSWORD: "root",
-    // PORT:'',
-    DB: "travi_test",
+    USER: "fajar",
+    PASSWORD: "123",
+    PORT:"5432",
+    DB: "travimate",
     dialect: "postgres",
     pool: {
       max: 5,
@@ -29,10 +29,10 @@ module.exports = {
   },
   production: {
     HOST: "localhost",
-    USER: "postgres",
-    PASSWORD: "root",
-    // PORT:'',
-    DB: "travi_production",
+    USER: "fajar",
+    PASSWORD: "123",
+    PORT:"5432",
+    DB: "travimate",
     dialect: "postgres",
     pool: {
       max: 5,

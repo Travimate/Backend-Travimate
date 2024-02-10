@@ -1,5 +1,6 @@
 package id.synrgy.travimate.security.service;
 
+import id.synrgy.travimate.exception.ResourceNotFoundException;
 import id.synrgy.travimate.model.User;
 import id.synrgy.travimate.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found: "+username));
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        User user = userRepository.findById(Integer.valueOf(userId))
+                .orElseThrow(() -> new ResourceNotFoundException(userId));
 
         return UserDetailsImpl.build(user);
     }

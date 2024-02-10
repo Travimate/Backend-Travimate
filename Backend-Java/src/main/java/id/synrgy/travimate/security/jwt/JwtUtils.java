@@ -18,7 +18,7 @@ public class JwtUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    @Value("${appku.app.jwtSecret}")
+    @Value("${travimate.app.jwtSecret}")
     private String jwtSecret;
 
     private Key key(){

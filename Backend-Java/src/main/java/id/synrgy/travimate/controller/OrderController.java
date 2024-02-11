@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.UUID;
 
-@Hidden
 @RestController
 @RequestMapping("/api/v1/order")
 public class OrderController {

@@ -239,19 +239,19 @@ public class FlightServiceImpl implements FlightService{
                         findAirportByIATACode(dep), findAirportByIATACode(arr), dateOfFlight));
         flightDataSet.forEach(flightData -> System.out.println("flight data = "+flightData));
         for(FlightData flightData : flightDataSet){
-            List<RouteDTO> routeDTOSet = flightData.getRouteSet().stream()
+            List<RouteProcess> routeProcessSet = flightData.getRouteSet().stream()
                     .flatMap(route -> mapToDTO(route, dep, arr, dateOfFlight,
                             flightData.getIsDirect(), flightClass).stream())
                     .toList();
 
-            for (RouteDTO routeDTO : routeDTOSet) {
+            for (RouteProcess routeProcess : routeProcessSet) {
                 JourneyDTO journey = new JourneyDTO();
                 journey.setFlightDataId(flightData.getId());
                 journey.setDeparture_airport(findAirportByIATACode(dep));
                 journey.setArrival_airport(findAirportByIATACode(arr));
                 journey.setFlightClass(flightData.getFlightClass());
-                journey.setRoute(Collections.singletonList(routeDTO));
-                loopJourney(journey, Collections.singletonList(routeDTO));
+                journey.setRoute(Collections.singletonList(mapToDTO(routeProcess)));
+                loopJourney(journey, Collections.singletonList(routeProcess));
                 journey.setBaseFare(flightData.getBaseFare());
                 if (!journey.getRoute().isEmpty()) {
                     journeyDTOList.add(journey);
@@ -265,63 +265,84 @@ public class FlightServiceImpl implements FlightService{
         );
         return journeyDTOList;
     }
-    private void loopJourney(JourneyDTO journey, List<RouteDTO> routeDTOSet){
-        for(RouteDTO routeDTO : routeDTOSet){
 
-            Set<Flight> flights = routeDTO.getFlights();
+    private void loopJourney(JourneyDTO journey, List<RouteProcess> routeProcessSet){
+        for(RouteProcess routeProcess : routeProcessSet){
+
+            Set<Flight> flights = routeProcess.getFlights();
             if (flights.isEmpty()) {
                 continue;
             }
 
-            journey.setAirline_operator(routeDTO.getOperated_airline().stream()
+            journey.setAirline_operator(routeProcess.getOperated_airline().stream()
                     .map(Airline::getAirline_name)
                     .collect(Collectors.joining(" + ")));
 
-            journey.setAirline(routeDTO.getOperated_airline());
+            journey.setAirline(routeProcess.getOperated_airline());
 
-            journey.setDof(routeDTO.getFlights().stream()
+            journey.setDof(routeProcess.getFlights().stream()
                     .map(Flight::getDof)
                     .findFirst()
                     .orElse(null));
-            journey.setDeparture_time(routeDTO.getFlights().stream()
+            journey.setDeparture_time(routeProcess.getFlights().stream()
                     .map(Flight::getDeparture_time)
                     .findFirst()
                     .orElse(null));
-            journey.setArrival_time(routeDTO.getFlights().stream()
+            journey.setArrival_time(routeProcess.getFlights().stream()
                     .map(Flight::getArrival_time)
                     .reduce((first, second) -> second)
                     .orElse(null));
 
-            LocalTime arrivalFirstFlight = routeDTO.getFlights().stream()
+            LocalTime arrivalFirstFlight = routeProcess.getFlights().stream()
                     .map(Flight::getArrival_time)
                     .findFirst()
                     .orElse(null);
 
-            journey.setTransit_time_minutes(routeDTO.getFlights().stream()
+            journey.setTransit_time_minutes(routeProcess.getFlights().stream()
                     .skip(1)
                     .findFirst()
                     .map(secondFlight -> Duration.between(arrivalFirstFlight, secondFlight.getDeparture_time()).toMinutes())
                     .orElse(null));
 
-            journey.setTotal_flight_time_minutes(routeDTO.getFlights().stream()
+            journey.setTotal_flight_time_minutes(routeProcess.getFlights().stream()
                     .mapToLong(flight -> ChronoUnit.MINUTES.between(flight.getDeparture_time(), flight.getArrival_time()))
                     .sum());
 
-            journey.setSeat_left(routeDTO.getFlights().stream()
+            journey.setSeat_left(routeProcess.getFlights().stream()
                     .map(Flight::getStock)
                     .findFirst()
                     .orElse(null));
 
-            int totalStops = routeDTOSet.size();
+            int totalStops = routeProcessSet.size();
             if (totalStops == 1) {
                 // Jika hanya satu RouteDTO ditemukan, set stops sesuai dengan RouteDTO tersebut
-                RouteDTO singleRouteDTO = routeDTOSet.iterator().next();
-                journey.setStops(singleRouteDTO.getStops());
+                RouteProcess singleRouteProcess = routeProcessSet.iterator().next();
+                journey.setStops(singleRouteProcess.getStops());
             } else {
                 // Jika lebih dari satu RouteDTO ditemukan, set stops dengan jumlah RouteDTO
                 journey.setStops(totalStops);
             }
+
         }
+    }
+
+    private RouteDTO mapToDTO(RouteProcess routeProcess) {
+        Set<Flight> flights = routeProcess.getFlights();
+        Set<FlightDTO> flightDTOList = new LinkedHashSet<>();
+        for (Flight flight : flights) {
+            FlightDTO flightDTO = mapToDTO(flight);
+            flightDTOList.add(flightDTO);
+        }
+
+        RouteDTO routeDTO = new RouteDTO();
+        routeDTO.setCode(routeProcess.getCode());
+        routeDTO.setOperated_airline(routeProcess.getOperated_airline());
+        routeDTO.setDeparture_airport(routeProcess.getDeparture_airport());
+        routeDTO.setDestination_airport(routeProcess.getDestination_airport());
+        routeDTO.setConnecting_airport(routeProcess.getConnecting_airport());
+        routeDTO.setStops(routeProcess.getStops());
+        routeDTO.setFlights(flightDTOList);
+        return routeDTO;
     }
 
     public List<Flight> findFlight(String dep, String arr, LocalDate dof, String airline, String flightClass){
@@ -331,8 +352,8 @@ public class FlightServiceImpl implements FlightService{
         return flightRepository.findByAirportAndAirline(dep, arr, dof, airline, flightClass);
     }
 
-    private List<RouteDTO> mapToDTO(Route route, String dep, String arr,
-                              LocalDate dateOfFlight, Boolean isDirect, String flightClass) {
+    private List<RouteProcess> mapToDTO(Route route, String dep, String arr,
+                                        LocalDate dateOfFlight, Boolean isDirect, String flightClass) {
 
         String airline = route.getOperated_airline().getIata_code();
         String connectingAirport = null;
@@ -347,7 +368,7 @@ public class FlightServiceImpl implements FlightService{
         }
 
         Set<TransitFlight> transitFlights = new LinkedHashSet<>();
-        Set<String> usedFlightNumbers = new HashSet<>(); // Menyimpan flightNumber yang sudah digunakan
+        Set<String> usedFlightNumbers = new HashSet<>();
 
         if (!isDirect) {
             List<Flight> depToConnectingFlights = findFlight(dep, connectingAirport, dateOfFlight, airline, flightClass);
@@ -376,13 +397,13 @@ public class FlightServiceImpl implements FlightService{
             }
         }
 
-        List<RouteDTO> routeDTOList = new LinkedList<>();
+        List<RouteProcess> routeProcessList = new LinkedList<>();
         // Direct flights
         for (Flight flight : directFlight) {
             Set<Flight> flights = Collections.singleton(flight);
             Set<Airline> airlines = Collections.singleton(flight.getAirline());
-            RouteDTO routeDTO = createRouteDTO(route, flights, airlines, 0);
-            routeDTOList.add(routeDTO);
+            RouteProcess routeProcess = createRouteDTO(route, flights, airlines, 0);
+            routeProcessList.add(routeProcess);
         }
 
         // Transit flights
@@ -397,22 +418,22 @@ public class FlightServiceImpl implements FlightService{
             Set<Flight> flights = new LinkedHashSet<>(flightsInOrder);
             Set<Airline> airlines = new HashSet<>(Arrays.asList(
                     transitFlight.getFirstFlight().getAirline(), transitFlight.getSecondFlight().getAirline()));
-            RouteDTO routeDTO = createRouteDTO(route, flights, airlines, 1);
-            routeDTOList.add(routeDTO);
+            RouteProcess routeProcess = createRouteDTO(route, flights, airlines, 1);
+            routeProcessList.add(routeProcess);
         }
-        return routeDTOList;
+        return routeProcessList;
     }
 
-    private RouteDTO createRouteDTO(Route route, Set<Flight> flights, Set<Airline> airlines, int stops) {
-        RouteDTO routeDTO = new RouteDTO();
-        routeDTO.setCode(route.getCode());
-        routeDTO.setDeparture_airport(route.getDeparture_airport());
-        routeDTO.setDestination_airport(route.getDestination_airport());
-        routeDTO.setConnecting_airport(route.getConnecting_airport());
-        routeDTO.setStops(stops);
-        routeDTO.setFlights(flights);
-        routeDTO.setOperated_airline(airlines);
-        return routeDTO;
+    private RouteProcess createRouteDTO(Route route, Set<Flight> flights, Set<Airline> airlines, int stops) {
+        RouteProcess routeProcess = new RouteProcess();
+        routeProcess.setCode(route.getCode());
+        routeProcess.setDeparture_airport(route.getDeparture_airport());
+        routeProcess.setDestination_airport(route.getDestination_airport());
+        routeProcess.setConnecting_airport(route.getConnecting_airport());
+        routeProcess.setStops(stops);
+        routeProcess.setFlights(flights);
+        routeProcess.setOperated_airline(airlines);
+        return routeProcess;
     }
 
     private FlightDataDTO mapToDTO(FlightData flightData, String dep, String arr){

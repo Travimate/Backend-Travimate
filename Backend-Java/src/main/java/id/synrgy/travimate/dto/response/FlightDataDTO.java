@@ -33,5 +33,5 @@ public class FlightDataDTO {
 
     private BaseFare baseFare;
 
-    private Set<RouteDTO> routeSet;
+    private Set<RouteProcess> routeSet;
 }

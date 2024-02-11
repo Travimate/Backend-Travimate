@@ -134,6 +134,7 @@ public class OrderServiceImpl implements OrderService{
     public OrderDTO mapToOrderDTO(Orders orders) {
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setOrderID(orders.getOrderID());
+        orderDTO.setUsers(orders.getUsers());
         orderDTO.setBookingID(orders.getBookingID());
         orderDTO.setBookedBy(orders.getBookedBy());
         orderDTO.setBookedDate(orders.getBookedDate());

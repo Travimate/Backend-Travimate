@@ -20,9 +20,9 @@ public class Users {
     private String email;
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "roleId"))
-    private List<Role> roleId;
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(name = "user_roles",
+//            joinColumns = @JoinColumn(name = "userId"),
+//            inverseJoinColumns = @JoinColumn(name = "roleId"))
+//    private List<Role> roleId;
 }

@@ -197,9 +197,16 @@ exports.signin = async (req, res) => {
       ? roles.map((role) => `ROLE_${role.name.toUpperCase()}`)
       : [];
 
-    const token = jwt.sign({ id: user.id }, config.secret, {
-      expiresIn: 8400, // 24 hours
-    });
+    const token = jwt.sign(
+      {
+        id: user.id,
+        authorities: authorities,
+      },
+      config.secret,
+      {
+        expiresIn: 8400, // 24 hours
+      }
+    );
 
     res.status(200).send({
       id: user.id,

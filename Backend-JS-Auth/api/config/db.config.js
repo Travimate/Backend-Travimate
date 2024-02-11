@@ -1,9 +1,8 @@
 module.exports = {
   development: {
     HOST: "localhost",
-    USER: "fajar",
-    PORT:"5432",
-    PASSWORD: "123",
+    USER: "postgres",
+    PASSWORD: "root",
     DB: "travimate",
     dialect: "postgres",
     pool: {

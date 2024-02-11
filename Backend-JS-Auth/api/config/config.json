@@ -1,8 +1,7 @@
 {
   "development": {
-    "username": "fajar",
-    "password": "123",
-    "port": "5432",
+    "username": "postgres",
+    "password": "root",
     "database": "travimate",
     "host": "localhost",
     "dialect": "postgres",

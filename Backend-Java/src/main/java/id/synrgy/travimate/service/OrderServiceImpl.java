@@ -97,6 +97,15 @@ public class OrderServiceImpl implements OrderService{
                 .orElseThrow(()-> new ResourceNotFoundException(orderID));
     }
 
+    @Override
+    public Object history(String username) {
+        Users users = userService.findByUsername(username);
+        List<Orders> ordersList = orderRepository.findByUsers(users);
+        return ordersList.stream()
+                .map(this::mapToOrderDTO)
+                .collect(Collectors.toCollection(LinkedList::new));
+    }
+
     private List<Flight> addFlightList(List<UUID> flightID) {
         List<Flight> flightList = new LinkedList<>();
         for(UUID id : flightID){
@@ -121,7 +130,6 @@ public class OrderServiceImpl implements OrderService{
             passenger.setFirstName(psDTO.getFirstName());
             passenger.setLastName(psDTO.getLastName());
             passenger.setType(Passenger.PassengerType.valueOf(psDTO.getType().toUpperCase()));
-            passenger.setNational_id(psDTO.getNational_id());
             passenger.setTicketId(ticketId);
             passenger.setFlight(flight);
             passengerRepository.save(passenger);
@@ -134,7 +142,7 @@ public class OrderServiceImpl implements OrderService{
     public OrderDTO mapToOrderDTO(Orders orders) {
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setOrderID(orders.getOrderID());
-        orderDTO.setUsers(orders.getUsers());
+        orderDTO.setUsername(orders.getUsers().getUsername());
         orderDTO.setBookingID(orders.getBookingID());
         orderDTO.setBookedBy(orders.getBookedBy());
         orderDTO.setBookedDate(orders.getBookedDate());
@@ -162,7 +170,6 @@ public class OrderServiceImpl implements OrderService{
         passengerDTO.setGreeting(passenger.getGreeting());
         passengerDTO.setFirstName(passenger.getFirstName());
         passengerDTO.setLastName(passenger.getLastName());
-        passengerDTO.setNational_id(passenger.getNational_id());
         passengerDTO.setTicketId(passenger.getTicketId());
         passengerDTO.setFlightNumber(passenger.getFlight().getFlightNumber());
         return passengerDTO;

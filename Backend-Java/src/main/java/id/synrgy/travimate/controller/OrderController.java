@@ -43,6 +43,11 @@ public class OrderController {
         return ResponseHandler.generateResponseSuccess(orderService.cancelOrder(orderID));
     }
 
+    @GetMapping("/history")
+    public ResponseEntity<Object> history(Principal principal){
+        return ResponseHandler.generateResponseSuccess(orderService.history(principal.getName()));
+    }
+
     @GetMapping("/e-ticket")
     public ResponseEntity<byte[]> generateReport(@RequestParam UUID orderID,
                                                  @RequestParam String format) throws JRException {

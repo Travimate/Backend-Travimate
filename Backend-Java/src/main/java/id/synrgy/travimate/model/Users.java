@@ -12,17 +12,18 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "users")
-public class User {
-
-    public enum Roles { admin, user }
+public class Users {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String username;
     private String email;
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private List<Roles> roles;
-
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(name = "user_roles",
+//            joinColumns = @JoinColumn(name = "userId"),
+//            inverseJoinColumns = @JoinColumn(name = "roleId"))
+//    private List<Role> roleId;
 }

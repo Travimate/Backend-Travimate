@@ -52,8 +52,8 @@ jobs:
             nohup java -jar .ssh/Backend-Travimate/Backend-Java/target/Travimate-0.0.1-SNAPSHOT.jar  > /dev/null 2>&1 &
             trap - TERM
 
-      # Example of using the output
-      - id: 'test'
+      - id: 'end'
         run: |-
           echo '${{ steps.compute-ssh.outputs.stdout }}'
           echo '${{ steps.compute-ssh.outputs.stderr }}'
+

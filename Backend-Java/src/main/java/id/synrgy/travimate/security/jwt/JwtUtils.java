@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.security.Key;
 
 @Component
@@ -24,17 +25,31 @@ public class JwtUtils {
     private Key key(){
         return Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(jwtSecret));
     }
-    public String getUsername(String jwt) {
-        return  Jwts.parserBuilder()
-                .setSigningKey(key()).build()
-                .parseClaimsJws(jwt)
-                .getBody()
-                .getSubject();
+    public String getId(String jwt) {
+//        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwt).getBody();
+//        return claims.get("id").toString();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(jwtSecret.getBytes("UTF-8"))
+                    .build()
+                    .parseClaimsJws(jwt)
+                    .getBody()
+                    .get("id")
+                    .toString();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+
+//        return  Jwts.parserBuilder()
+//                .setSigningKey(key()).build()
+//                .parseClaimsJws(jwt)
+//                .getBody()
+//                .getSubject();
     }
 
     public boolean validateJwtToken(String token, HttpServletResponse response) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(jwtSecret.getBytes("UTF-8")).parseClaimsJws(token);
             return true;
         } catch (SignatureException e) {
             // Invalid signature
@@ -51,6 +66,8 @@ public class JwtUtils {
         } catch (IllegalArgumentException e) {
             // Token is empty or null
             handleJwtError(response, "JWT token is empty or null: " + e.getMessage());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
         return false;
     }

@@ -1,7 +1,7 @@
 package id.synrgy.travimate.service;
 
 import id.synrgy.travimate.exception.ResourceNotFoundException;
-import id.synrgy.travimate.model.User;
+import id.synrgy.travimate.model.Users;
 import id.synrgy.travimate.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class UserServiceImpl implements UserService{
         this.userRepository = userRepository;
     }
     @Override
-    public User findByUsername(String username) {
+    public Users findByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(()-> new ResourceNotFoundException(username));
     }

@@ -1,8 +1,8 @@
 package id.synrgy.travimate.service;
 
-import id.synrgy.travimate.model.User;
+import id.synrgy.travimate.model.Users;
 
 public interface UserService {
 
-    User findByUsername(String username);
+    Users findByUsername(String username);
 }

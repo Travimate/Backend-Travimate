@@ -3,6 +3,7 @@ package id.synrgy.travimate.security.service;
 import id.synrgy.travimate.exception.ResourceNotFoundException;
 import id.synrgy.travimate.model.Users;
 import id.synrgy.travimate.repository.UserRepository;
+import id.synrgy.travimate.security.jwt.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

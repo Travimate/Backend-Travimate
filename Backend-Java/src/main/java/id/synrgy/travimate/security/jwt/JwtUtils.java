@@ -25,26 +25,16 @@ public class JwtUtils {
     private Key key(){
         return Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(jwtSecret));
     }
-    public String getId(String jwt) {
-//        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwt).getBody();
-//        return claims.get("id").toString();
+    public Claims getObject(String jwt) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(jwtSecret.getBytes("UTF-8"))
                     .build()
                     .parseClaimsJws(jwt)
-                    .getBody()
-                    .get("id")
-                    .toString();
+                    .getBody();
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-
-//        return  Jwts.parserBuilder()
-//                .setSigningKey(key()).build()
-//                .parseClaimsJws(jwt)
-//                .getBody()
-//                .getSubject();
     }
 
     public boolean validateJwtToken(String token, HttpServletResponse response) {
@@ -52,19 +42,19 @@ public class JwtUtils {
             Jwts.parser().setSigningKey(jwtSecret.getBytes("UTF-8")).parseClaimsJws(token);
             return true;
         } catch (SignatureException e) {
-            // Invalid signature
+
             handleJwtError(response, "Invalid JWT signature: " + e.getMessage());
         } catch (MalformedJwtException e) {
-            // Invalid token
+
             handleJwtError(response, "Invalid JWT token: " + e.getMessage());
         } catch (ExpiredJwtException e) {
-            // Expired token
+
             handleJwtError(response, "JWT token has expired: " + e.getMessage());
         } catch (UnsupportedJwtException e) {
-            // Unsupported token
+
             handleJwtError(response, "Unsupported JWT token: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            // Token is empty or null
+
             handleJwtError(response, "JWT token is empty or null: " + e.getMessage());
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);

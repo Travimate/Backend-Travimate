@@ -15,8 +15,8 @@ dotenv.config();
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "bgsp_aditya@student.uns.ac.id",
-    pass: "kkxv jrgx ivfb zrdr",
+    user: "travimate.synrgy@gmail.com",
+    pass: "rurf lsps hnkj rtla",
   },
 });
 
@@ -27,7 +27,7 @@ function sendVerificationEmail(user) {
   const verificationLink = `http://localhost:8081/api/auth/verify-email?token=${user.emailVerificationToken}`;
 
   const mailOptions = {
-    from: "bgsp_aditya@student.uns.ac.id",
+    from: "travimate.synrgy@gmail.com",
     to: user.email,
     subject: "Verifikasi Email",
     text: `Klik tautan berikut untuk memverifikasi email anda: ${verificationLink}`,
@@ -65,7 +65,7 @@ exports.forgotPassword = async (req, res) => {
     const resetLink = `http://localhost:8081/reset-password?token=${resetToken}`;
 
     const mailOptions = {
-      from: "bgsp_aditya@student.uns.ac.id",
+      from: "travimate.synrgy@gmail.com",
       to: user.email,
       subject: "Reset Password",
       text: `Anda menerima email ini karena mengajukan reset password. Tolong klik tautan berikut untuk mereset password akun anda: ${resetLink}`,

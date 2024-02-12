@@ -253,7 +253,12 @@ public class FlightServiceImpl implements FlightService{
                 journey.setRoute(Collections.singletonList(mapToDTO(routeProcess)));
                 loopJourney(journey, Collections.singletonList(routeProcess));
                 journey.setBaseFare(flightData.getBaseFare());
-                if (!journey.getRoute().isEmpty()) {
+//                RouteDTO routeDTO = journey.getRoute()
+//                        .stream().findFirst()
+//                        .orElse(null);
+                if (!journey.getRoute().isEmpty()
+//                        && routeDTO!=null && !routeDTO.getFlights().isEmpty()
+                ) {
                     journeyDTOList.add(journey);
                 }
             }

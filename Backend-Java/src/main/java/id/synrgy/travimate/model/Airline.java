@@ -20,4 +20,5 @@ public class Airline {
     private Integer cabinBaggage;
 
     private Integer baggage;
+
 }

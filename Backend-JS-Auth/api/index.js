@@ -9,7 +9,7 @@ const corsOptions = {
 };
 const dotenv = require('dotenv');
 dotenv.config();
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 8081;

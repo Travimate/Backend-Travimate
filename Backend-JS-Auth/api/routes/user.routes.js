@@ -1,6 +1,7 @@
 const { authJwt } = require("../middleware");
 const users = require("../controllers/user.controller");
-
+var multer  = require('multer');
+var upload = multer() ;
 module.exports = function (app) {
   app.use(function (req, res, next) {
     res.header(
@@ -22,7 +23,7 @@ module.exports = function (app) {
   );
   // Update a User with id (for the user to update their own account)
   app.put(
-    "/api/users/:id",
+    "/api/users/:id", upload.single('pp'),
     [authJwt.verifyToken, authJwt.isUser, authJwt.authCheck],
     users.update
   );

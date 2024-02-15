@@ -20,11 +20,10 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Function to generate a unique reset token
 const generateResetToken = () => uuidv4();
 
 function sendVerificationEmail(user) {
-  const verificationLink = `http://localhost:8081/api/auth/verify-email?token=${user.emailVerificationToken}`;
+  const verificationLink = `${process.env.BASE_URL}/api/auth/verify-email?token=${user.emailVerificationToken}`;
 
   const mailOptions = {
     from: "travimate.synrgy@gmail.com",
@@ -50,7 +49,7 @@ exports.forgotPassword = async (req, res) => {
     const user = await db.User.findOne({ where: { email } });
 
     if (!user) {
-      return res.status(404).send({ message: "Pengguna tidak ditemukan!" });
+      return res.status(404).send({ status: 404, message: "Pengguna tidak ditemukan!" });
     }
 
     // Generate a unique reset token
@@ -77,7 +76,7 @@ exports.forgotPassword = async (req, res) => {
     res.send({ message: "Email berhasil dikirimkan", resetToken });
   } catch (err) {
     console.log(err);
-    res.status(500).send({ message: "Kesalahan server internal!" });
+    res.status(500).send({ status: 500, message: "Kesalahan server internal!" });
   }
 };
 
@@ -93,7 +92,7 @@ exports.resetPassword = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).send({ message: "Token salah atau kadaluarsa!" });
+      return res.status(400).send({ status: 400, message: "Token salah atau kadaluarsa!" });
     }
 
     // Update user's password
@@ -104,10 +103,10 @@ exports.resetPassword = async (req, res) => {
 
     await user.save();
 
-    res.status(200).json({ message: "Password berhasil diubah!" });
+    res.status(200).json({ status: 200, message: "Password berhasil diubah!" });
   } catch (err) {
     console.log(err);
-    res.status(500).send({ message: "Kesalahan server internal!" });
+    res.status(500).send({ status: 500, message: "Kesalahan server internal!" });
   }
 };
 
@@ -122,6 +121,7 @@ exports.signup = async (req, res) => {
       dob,
       phone,
       greeting,
+      pp: "https://res.cloudinary.com/dmta1mm4p/image/upload/v1707805375/slbzq9etce6o00r2mkw4.png",
       emailVerificationToken: uuidv4(),
     });
 
@@ -146,9 +146,9 @@ exports.signup = async (req, res) => {
       await user.setRoles([defaultRole]);
     }
 
-    res.send({ message: "User berhasil didaftarkan!" });
+    res.status(200).send({ status: 200, message: "User berhasil didaftarkan!" });
   } catch (err) {
-    res.status(500).send({ message: err.message });
+    res.status(500).send({ status: 500, message: err.message });
   }
 };
 
@@ -161,33 +161,34 @@ exports.verifyEmail = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).send({ message: "Token verifikasi tidak valid!" });
+      return res.status(404).send({ status: 404, message: "Token verifikasi tidak valid!" });
     }
 
     user.emailVerified = true;
     user.emailVerificationToken = null;
     await user.save();
 
-    res.status(200).send({ message: "Email berhasil diverifikasi!" });
+    res.status(200).send({ status: 200, message: "Email berhasil diverifikasi!" });
   } catch (err) {
-    res.status(500).send({ message: err.message });
+    res.status(500).send({ status: 500, message: err.message });
   }
 };
 
 exports.signin = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   try {
-    const user = await db.User.findOne({ where: { username } });
+    const user = await db.User.findOne({ where: { email } });
 
     if (!user) {
-      return res.status(404).send({ message: "User tidak ditemukan!" });
+      return res.status(404).send({ status: 404, message: "User tidak ditemukan!" });
     }
 
     const passwordIsValid = bcrypt.compareSync(password, user.password);
 
     if (!passwordIsValid) {
       return res.status(401).send({
+        status: 401,
         accessToken: null,
         message: "Passsword tidak valid!",
       });
@@ -209,19 +210,21 @@ exports.signin = async (req, res) => {
     );
 
     res.status(200).send({
-      id: user.id,
+      status: 200,
+      // id: user.id,
       username: user.username,
       email: user.email,
       dob: user.dob,
       phone: user.phone,
       greeting: user.greeting,
+      pp: user.pp,
       roles: authorities,
       accessToken: token,
       emailVerified: user.emailVerified,
       emailVerificationToken: user.emailVerificationToken,
     });
   } catch (err) {
-    res.status(500).send({ message: err.message });
+    res.status(500).send({ status: 500, message: err.message });
   }
 };
 
@@ -231,11 +234,11 @@ exports.logout = (req, res) => {
   if (!token) {
     return res
       .status(401)
-      .send({ message: "Tidak ada token yang disediakan!" });
+      .send({ status: 401, message: "Tidak ada token yang disediakan!" });
   }
 
   // Invalidate the token by adding it to the blacklist
   authJwt.invalidateToken(token);
 
-  res.status(200).send({ message: "Logout berhasil!" });
+  res.status(200).send({ status: 200, message: "Logout berhasil!" });
 };

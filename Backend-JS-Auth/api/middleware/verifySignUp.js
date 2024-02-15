@@ -10,6 +10,7 @@ const checkDuplicateUsernameOrEmail = (req, res, next) => {
 
   if (!username || username.trim() === "") {
     return res.status(400).send({
+      status: 400,
       message: "Aksi gagal! Username harus diisi!",
     });
   }
@@ -21,6 +22,7 @@ const checkDuplicateUsernameOrEmail = (req, res, next) => {
   }).then((user) => {
     if (user) {
       return res.status(400).send({
+        status: 400,
         message: "Aksi gagal! Username telah dipakai!",
       });
     }
@@ -28,6 +30,7 @@ const checkDuplicateUsernameOrEmail = (req, res, next) => {
     // Email
     if (!email || email.trim() === "") {
       return res.status(400).send({
+        status: 400,
         message: "Aksi gagal! Email tidak dapat kosong!",
       });
     }
@@ -36,6 +39,7 @@ const checkDuplicateUsernameOrEmail = (req, res, next) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.status(400).send({
+        status: 400,
         message: "Aksi gagal! Format email tidak valid!",
       });
     }
@@ -48,6 +52,7 @@ const checkDuplicateUsernameOrEmail = (req, res, next) => {
     }).then((user) => {
       if (user) {
         return res.status(400).send({
+          status: 400,
           message: "Aksi gagal! Email telah dipakai!",
         });
       }
@@ -62,6 +67,7 @@ const checkRolesExisted = (req, res, next) => {
     for (let i = 0; i < req.body.roles.length; i++) {
       if (!ROLES.includes(req.body.roles[i])) {
         return res.status(400).send({
+          status: 400,
           message: "Aksi Gagal! Role tidak tersedia = " + req.body.roles[i],
         });
       }
@@ -77,6 +83,7 @@ const validatePassword = (req, res, next) => {
 
   if (!password || password.trim() === "") {
     return res.status(400).send({
+      status: 400,
       message: "Aksi gagal! Password tidak boleh kosong!",
     });
   }
@@ -84,6 +91,7 @@ const validatePassword = (req, res, next) => {
   // Password length check
   if (password.length < 6) {
     return res.status(400).send({
+      status: 400,
       message: "Aksi gagal! Password harus terdiri dari minimal 6 karakter!",
     });
   }
@@ -92,6 +100,7 @@ const validatePassword = (req, res, next) => {
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?& _])[A-Za-z\d@$!%*?&_ ]/;
   if (!passwordRegex.test(password)) {
     return res.status(400).send({
+      status: 400,
       message: "Aksi gagal! Password harus memiliki minimal satu huruf kecil, satu huruf besar, sati angka, dan satu karakter spesial!.",
     });
   }

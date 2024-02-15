@@ -36,8 +36,7 @@ jobs:
             killall node || true
             cd .ssh/Backend-Travimate/Backend-JS-Auth
             npm install
-            npm update
-            npm start > /dev/null 2>&1 &
+            pm2 start npm --name "Backend-Travimate" -- start
 
       - name: Kill and Run new JAR file in VM
         uses: appleboy/ssh-action@master

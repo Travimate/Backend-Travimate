@@ -33,7 +33,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            killall node || true
+            pm2 delete all || true
             cd .ssh/Backend-Travimate/Backend-JS-Auth
             npm install
             pm2 start npm --name "Backend-Travimate" -- start

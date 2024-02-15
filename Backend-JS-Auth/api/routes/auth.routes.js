@@ -335,6 +335,6 @@ module.exports = function (app) {
   app.post("/api/auth/reset-password", controller.resetPassword);
 
   app.post("/api/auth/signin", controller.signin);
-  // Logout
+  // Logout route
   app.post("/api/auth/logout", [authJwt.authCheck], controller.logout);
 };

@@ -19,7 +19,7 @@ app.use(cors());
 app.use(morgan("dev"));
 const PORT = process.env.PORT || 8081;
 
-// database
+// databas
 
 sequelize.sync().then(() => {
   console.log("Database synchronized");

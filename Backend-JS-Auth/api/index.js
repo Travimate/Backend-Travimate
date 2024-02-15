@@ -1,7 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const swagger = require('./../swagger'); // Import the Swagger configuration
+const morgan = require("morgan");
+const swagger = require("./../swagger"); // Imprt the Swagger configuration
 const { sequelize, Role } = require("./models");
 const app = express();
 const corsOptions = {
@@ -9,13 +10,16 @@ const corsOptions = {
 };
 const dotenv = require('dotenv');
 dotenv.config();
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: '*' 
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
+app.use(morgan("dev"));
 const PORT = process.env.PORT || 8081;
 
 // database
-
 
 sequelize.sync().then(() => {
   console.log("Database synchronized");

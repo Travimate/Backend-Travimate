@@ -35,7 +35,7 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-      // Add more seeded user data as needed
+      // Add more seeded user data as neededs
     ], {});
   },
 

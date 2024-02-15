@@ -31,6 +31,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      pp: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
       accessToken: {
         type: Sequelize.STRING,
         allowNull: true,

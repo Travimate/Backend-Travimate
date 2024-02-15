@@ -97,7 +97,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#components/schemas/User'
+ *               $ref: '#/components/schemas/User'
  *       500:
  *         description: Kesalahan server!
  * /api/users:
@@ -119,7 +119,27 @@
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#components/schemas/User'
+ *                 $ref: '#/components/schemas/User'
+ * /api/auth/me:
+ *   get:
+ *     summary: Melihat profil pribadi, dan mengecek apakah token expired
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: header
+ *         name: x-access-token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token login user
+ *     responses:
+ *       200:
+ *         description: Informasi Login User
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
  * /api/auth/verify-email?token={emailVerificationToken}:
  *   get:
  *     summary: Verifikasi email
@@ -137,7 +157,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#components/schemas/User'
+ *               $ref: '#/components/schemas/User'
  *       404:
  *         description: Email tidak dapat terverifikasi
  * /api/auth/forgot-password:
@@ -156,7 +176,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#components/schemas/User'
+ *               $ref: '#/components/schemas/User'
  *       500:
  *         description: Kesalahan server!
  * /api/auth/reset-password:
@@ -175,7 +195,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#components/schemas/Reset'
+ *               $ref: '#/components/schemas/Reset'
  *       500:
  *         description: Kesalahan server!
  * /api/auth/logout:
@@ -197,7 +217,7 @@
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#components/schemas/User'
+ *                 $ref: '#/components/schemas/User'
  * /api/users/{id}:
  *   get:
  *    summary: Lihat data user by id

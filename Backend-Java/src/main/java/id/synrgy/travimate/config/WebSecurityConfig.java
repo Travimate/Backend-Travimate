@@ -18,15 +18,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-
-import java.io.IOException;
 
 @Configuration
 @EnableMethodSecurity
@@ -53,9 +49,9 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests( auth ->
                         auth
 //                            .requestMatchers("/api/v1/order/**").hasRole("user")
-//                            .requestMatchers("/api/v1/order/**").permitAll()
+                            .requestMatchers("/api/v1/order/airline-report").permitAll()
                             .requestMatchers("/api/v1/flight/**").permitAll()
-//                            .requestMatchers("/api/v1/payment/**").permitAll()
+                            .requestMatchers("/api/v1/payment/**").permitAll()
 
                             .requestMatchers("/api-docs/**").permitAll()
                             .requestMatchers("/swagger-ui/**").permitAll()

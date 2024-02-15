@@ -11,7 +11,7 @@
             <rightPen lineWidth="0.5" lineColor="rgba(255, 255, 255, 0.0)"/>
         </box>
     </style>
-    <style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+    <style name="Table_CH" mode="Opaque" backcolor="#2945E3">
         <box>
             <pen lineWidth="0.5" lineColor="rgba(255, 255, 255, 0.0)"/>
             <topPen lineWidth="0.5" lineColor="rgba(255, 255, 255, 0.0)"/>
@@ -38,7 +38,7 @@
             <rightPen lineWidth="0.5" lineColor="#000000"/>
         </box>
     </style>
-    <style name="Table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+    <style name="Table 1_CH" mode="Opaque" backcolor="#2945E3">
         <box>
             <pen lineWidth="0.5" lineColor="#000000"/>
             <topPen lineWidth="0.5" lineColor="#000000"/>
@@ -97,28 +97,30 @@
     <title>
         <band height="120" splitType="Stretch">
             <textField>
-                <reportElement x="450" y="24" width="100" height="30" forecolor="#0000FF" uuid="4bf603c8-3bd1-4bab-a5bf-3feba90fde5e"/>
+                <reportElement x="450" y="45" width="100" height="25" forecolor="#0000FF" uuid="4bf603c8-3bd1-4bab-a5bf-3feba90fde5e"/>
                 <textElement textAlignment="Right" markup="styled">
-                    <font fontName="Myriad Pro" size="18" isBold="true"/>
+                    <font fontName="Myriad Pro" size="16" isBold="true"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$P{bookingCode}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="450" y="64" width="100" height="30" forecolor="#0000FF" uuid="63d08558-ebf0-4343-8b14-15101c60f9c0"/>
+                <reportElement x="450" y="85" width="100" height="22" forecolor="#0000FF" uuid="63d08558-ebf0-4343-8b14-15101c60f9c0">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
                 <textElement textAlignment="Right" markup="styled">
-                    <font fontName="Myriad Pro" size="18" isBold="true"/>
+                    <font fontName="Myriad Pro" size="16" isBold="true"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$P{airlineBookingCode}]]></textFieldExpression>
             </textField>
             <staticText>
-                <reportElement x="450" y="0" width="100" height="30" uuid="81a0ab3c-bf4d-4cd6-8fad-335f01601e01"/>
+                <reportElement x="450" y="21" width="100" height="30" uuid="81a0ab3c-bf4d-4cd6-8fad-335f01601e01"/>
                 <textElement textAlignment="Right" markup="styled">
                     <font fontName="Adobe Heiti Std R" size="12" isBold="false"/>
                 </textElement>
                 <text><![CDATA[Kode Booking]]></text>
             </staticText>
             <staticText>
-                <reportElement x="450" y="40" width="100" height="30" uuid="830b1a29-5d29-4ab1-9f6b-70ae95b899ad"/>
+                <reportElement x="450" y="61" width="100" height="30" uuid="830b1a29-5d29-4ab1-9f6b-70ae95b899ad"/>
                 <textElement textAlignment="Right" markup="styled">
                     <font fontName="Adobe Heiti Std R" size="12" isBold="false"/>
                 </textElement>
@@ -195,7 +197,7 @@
                                 <text><![CDATA[Langsung]]></text>
                             </staticText>
                             <textField>
-                                <reportElement x="267" y="34" width="80" height="30" uuid="08da63bc-993f-40a0-b1ca-7fe0ee2d9427"/>
+                                <reportElement x="270" y="34" width="80" height="30" uuid="08da63bc-993f-40a0-b1ca-7fe0ee2d9427"/>
                                 <textElement verticalAlignment="Middle" markup="styled"/>
                                 <textFieldExpression><![CDATA[$F{depTime}+"\n"+
 $F{dep}]]></textFieldExpression>
@@ -203,8 +205,8 @@ $F{dep}]]></textFieldExpression>
                             <textField>
                                 <reportElement x="475" y="34" width="76" height="30" uuid="7c1a3e69-f6b0-4531-b0fd-e3cff292a842"/>
                                 <textElement verticalAlignment="Middle" markup="styled"/>
-                                <textFieldExpression><![CDATA[$F{depTime}+"\n"+
-$F{dep}]]></textFieldExpression>
+                                <textFieldExpression><![CDATA[$F{arrTime}+"\n"+
+$F{arr}]]></textFieldExpression>
                             </textField>
                             <textField>
                                 <reportElement x="336" y="6" width="100" height="30" uuid="73dd4084-73d5-4e21-b112-16332fb07c13"/>
@@ -235,7 +237,7 @@ $F{dep}]]></textFieldExpression>
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
                         <jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement x="0" y="0" width="30" height="30" uuid="e2a5936b-45da-46e0-8ab1-5c5f70648f2e"/>
+                                <reportElement x="0" y="0" width="30" height="30" forecolor="#FFFFFF" uuid="e2a5936b-45da-46e0-8ab1-5c5f70648f2e"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
                                     <font size="12"/>
                                 </textElement>
@@ -243,12 +245,12 @@ $F{dep}]]></textFieldExpression>
                             </staticText>
                         </jr:columnHeader>
                         <jr:detailCell style="Table 1_TD" height="30">
-                            <textField>
-                                <reportElement x="0" y="0" width="30" height="30" uuid="2a59412d-b86e-48b6-8781-370b6f167283">
+                            <textField textAdjust="StretchHeight">
+                                <reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="30" height="30" isPrintWhenDetailOverflows="true" uuid="2a59412d-b86e-48b6-8781-370b6f167283">
                                     <property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
                                 </reportElement>
-                                <textElement verticalAlignment="Middle" markup="styled">
-                                    <paragraph leftIndent="5"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
+                                    <paragraph leftIndent="0"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{no}]]></textFieldExpression>
                             </textField>
@@ -258,7 +260,7 @@ $F{dep}]]></textFieldExpression>
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
                         <jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement x="0" y="0" width="140" height="30" uuid="b10b5736-4d21-46bb-a356-d59f6bc5e17a"/>
+                                <reportElement x="0" y="0" width="140" height="30" forecolor="#FFFFFF" uuid="b10b5736-4d21-46bb-a356-d59f6bc5e17a"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
                                     <font size="12"/>
                                 </textElement>
@@ -266,8 +268,8 @@ $F{dep}]]></textFieldExpression>
                             </staticText>
                         </jr:columnHeader>
                         <jr:detailCell style="Table 1_TD" height="30">
-                            <textField>
-                                <reportElement x="0" y="0" width="140" height="30" uuid="fe1c2061-26cd-4d5f-9aa7-30ccd19f3a19"/>
+                            <textField textAdjust="StretchHeight">
+                                <reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="140" height="30" isPrintWhenDetailOverflows="true" uuid="fe1c2061-26cd-4d5f-9aa7-30ccd19f3a19"/>
                                 <textElement verticalAlignment="Middle" markup="styled">
                                     <paragraph leftIndent="5"/>
                                 </textElement>
@@ -279,7 +281,7 @@ $F{dep}]]></textFieldExpression>
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
                         <jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement x="0" y="0" width="70" height="30" uuid="7b97caa6-a113-4119-9087-f1b611af522f"/>
+                                <reportElement x="0" y="0" width="70" height="30" forecolor="#FFFFFF" uuid="7b97caa6-a113-4119-9087-f1b611af522f"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
                                     <font size="12"/>
                                 </textElement>
@@ -287,8 +289,8 @@ $F{dep}]]></textFieldExpression>
                             </staticText>
                         </jr:columnHeader>
                         <jr:detailCell style="Table 1_TD" height="30">
-                            <textField>
-                                <reportElement x="0" y="0" width="70" height="30" uuid="305a47bc-ed7e-463b-82f4-af80acca70f2"/>
+                            <textField textAdjust="StretchHeight">
+                                <reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="70" height="30" isPrintWhenDetailOverflows="true" uuid="305a47bc-ed7e-463b-82f4-af80acca70f2"/>
                                 <textElement verticalAlignment="Middle" markup="styled">
                                     <paragraph leftIndent="5"/>
                                 </textElement>
@@ -300,7 +302,7 @@ $F{dep}]]></textFieldExpression>
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
                         <jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement x="0" y="0" width="110" height="30" uuid="e4359502-0202-4fef-ba77-041e2b2e4bb9"/>
+                                <reportElement x="0" y="0" width="110" height="30" forecolor="#FFFFFF" uuid="e4359502-0202-4fef-ba77-041e2b2e4bb9"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
                                     <font size="12"/>
                                 </textElement>
@@ -308,8 +310,8 @@ $F{dep}]]></textFieldExpression>
                             </staticText>
                         </jr:columnHeader>
                         <jr:detailCell style="Table 1_TD" height="30">
-                            <textField>
-                                <reportElement x="0" y="0" width="110" height="30" uuid="73b824cb-d260-493c-9552-d0de1ab88239"/>
+                            <textField textAdjust="StretchHeight">
+                                <reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="110" height="30" isPrintWhenDetailOverflows="true" uuid="73b824cb-d260-493c-9552-d0de1ab88239"/>
                                 <textElement verticalAlignment="Middle" markup="styled">
                                     <paragraph leftIndent="5"/>
                                 </textElement>
@@ -321,7 +323,7 @@ $F{dep}]]></textFieldExpression>
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
                         <jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement x="0" y="0" width="110" height="30" uuid="fa68e46f-6b75-489b-a5f8-b26af2c03968"/>
+                                <reportElement x="0" y="0" width="110" height="30" forecolor="#FFFFFF" uuid="fa68e46f-6b75-489b-a5f8-b26af2c03968"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
                                     <font size="12"/>
                                 </textElement>
@@ -329,8 +331,8 @@ $F{dep}]]></textFieldExpression>
                             </staticText>
                         </jr:columnHeader>
                         <jr:detailCell style="Table 1_TD" height="30">
-                            <textField>
-                                <reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="110" height="30" uuid="dc29f919-9e9d-49f5-a27b-597fdb5d0bfa"/>
+                            <textField textAdjust="StretchHeight">
+                                <reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="110" height="30" isPrintWhenDetailOverflows="true" uuid="dc29f919-9e9d-49f5-a27b-597fdb5d0bfa"/>
                                 <textElement verticalAlignment="Middle" markup="styled">
                                     <paragraph leftIndent="5"/>
                                 </textElement>
@@ -342,7 +344,7 @@ $F{dep}]]></textFieldExpression>
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
                         <jr:columnHeader style="Table 1_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement x="0" y="0" width="99" height="30" uuid="11fa8166-c679-4ef9-ac1a-6d6c7b4e3561"/>
+                                <reportElement x="0" y="0" width="99" height="30" forecolor="#FFFFFF" uuid="11fa8166-c679-4ef9-ac1a-6d6c7b4e3561"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
                                     <font size="12"/>
                                 </textElement>
@@ -350,8 +352,8 @@ $F{dep}]]></textFieldExpression>
                             </staticText>
                         </jr:columnHeader>
                         <jr:detailCell style="Table 1_TD" height="30">
-                            <textField>
-                                <reportElement x="0" y="0" width="99" height="30" uuid="572366ac-7175-4b16-a19b-bfba4a4cb313"/>
+                            <textField textAdjust="StretchHeight">
+                                <reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="99" height="30" isPrintWhenDetailOverflows="true" uuid="572366ac-7175-4b16-a19b-bfba4a4cb313"/>
                                 <textElement verticalAlignment="Middle" markup="styled">
                                     <paragraph leftIndent="5"/>
                                 </textElement>
@@ -359,6 +361,7 @@ $F{dep}]]></textFieldExpression>
                             </textField>
                         </jr:detailCell>
                     </jr:column>
+                    <jr:detail splitType="Stretch"/>
                 </jr:table>
             </componentElement>
         </band>

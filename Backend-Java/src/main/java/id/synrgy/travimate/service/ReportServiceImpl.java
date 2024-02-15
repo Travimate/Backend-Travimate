@@ -1,9 +1,10 @@
 package id.synrgy.travimate.service;
 
+import id.synrgy.travimate.dto.report.AirlineRevenueReport;
 import id.synrgy.travimate.dto.report.FlightReport;
 import id.synrgy.travimate.dto.report.PassengerReport;
-import id.synrgy.travimate.exception.ResourceNotFoundException;
 import id.synrgy.travimate.model.*;
+import id.synrgy.travimate.repository.OrderRepository;
 import id.synrgy.travimate.repository.UserRepository;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -24,12 +25,15 @@ public class ReportServiceImpl implements ReportService {
 
     private final OrderService orderService;
     private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
 
     @Autowired
     ReportServiceImpl(OrderService orderService,
-                      UserRepository userRepository){
+                      UserRepository userRepository,
+                      OrderRepository orderRepository){
         this.orderService = orderService;
         this.userRepository = userRepository;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -42,18 +46,16 @@ public class ReportServiceImpl implements ReportService {
         parameter.put("airlineBookingCode", orders.getPnrCode());
         parameter.put("flightDataSource", flightDataSource(orders));
         parameter.put("passengerDataSource", passengerDataSource(orders));
-        parameter.put("flightReport", getFlightReport());
         parameter.put("iconUrl", getSource("/templates/icon/travimate.png"));
-        JasperPrint jasperPrint = createJasperPrint(parameter);
+
+        JasperPrint jasperPrint = createJasperPrint(parameter, "/templates/eticket.jrxml");
 
         return exportReport(jasperPrint, format);
     }
 
-
     private JRBeanCollectionDataSource flightDataSource(Orders order){
         List<FlightReport> flightDataset = new LinkedList<>();
 
-        order.getFlightList().forEach(flight -> System.out.println("flight = "+ flight));
         List<Flight> flightList = order.getFlightList();
         for (Flight flight : flightList){
             FlightReport flightReport = new FlightReport();
@@ -102,9 +104,9 @@ public class ReportServiceImpl implements ReportService {
         return new JRBeanCollectionDataSource(passengerDataset);
     }
 
-    private JasperPrint createJasperPrint(Map<String, Object> parameter) throws JRException {
+    private JasperPrint createJasperPrint(Map<String, Object> parameter, String templateSource) throws JRException {
 
-        InputStream templateStream = getClass().getResourceAsStream("/templates/eticket.jrxml");
+        InputStream templateStream = getClass().getResourceAsStream(templateSource);
 
         JasperReport jasperReport = JasperCompileManager.compileReport(templateStream);
 
@@ -134,17 +136,6 @@ public class ReportServiceImpl implements ReportService {
         return outputStream.toByteArray();
     }
 
-    private JasperReport getFlightReport(){
-        InputStream templateStream = getClass().getResourceAsStream("/templates/flight-data.jrxml");
-        JasperReport jasperReport = null;
-        try {
-            jasperReport = JasperCompileManager.compileReport(templateStream);
-        } catch (JRException e) {
-            throw new RuntimeException(e);
-        }
-        return jasperReport;
-    }
-
     private InputStream getSource(String source){
         return getClass().getResourceAsStream(source);
     }
@@ -153,7 +144,8 @@ public class ReportServiceImpl implements ReportService {
         StringBuilder stringBuilder = new StringBuilder();
         for (Flight flight : flightList) {
             stringBuilder.append(flight.getFlightNumber()).append("\n");
-            stringBuilder.append(getAirportDetails(flight.getDep())).append(" - ").append(getAirportDetails(flight.getArr())).append("\n");
+            stringBuilder.append(flight.getDep().getIata_code()).append(" - ").append(flight.getArr().getIata_code()).append("\n");
+//            stringBuilder.append(getAirportDetails(flight.getDep())).append(" - ").append(getAirportDetails(flight.getArr())).append("\n");
         }
         return stringBuilder.toString();
     }
@@ -162,85 +154,120 @@ public class ReportServiceImpl implements ReportService {
         return airport.getAirport_name() + " (" + airport.getIata_code() + ")";
     }
 
-//    @Override
-//    public byte[] generateAirlineSalesReport(UUID orderID, String format) throws JRException {
-//
-//        Orders orders = orderService.findOrder(orderID);
-//
-//        Map<String,Object> parameter =  new HashMap<>();
-//        parameter.put("bookingCode", orders.getBookingID());
-//        parameter.put("airlineBookingCode", orders.getPnrCode());
-//        parameter.put("flightDataSource", flightDataSource(orders));
-//        parameter.put("passengerDataSource", passengerDataSource(orders));
-//        parameter.put("flightReport", getFlightReport());
-//        JasperPrint jasperPrint = createJasperPrint(parameter);
-//
-//        return exportReport(jasperPrint, format);
-//    }
+    @Override
+    public byte[] generateAirlineSalesReport(String iataCode, String format,
+                                             String periode, Integer month,
+                                             Integer year, LocalDate week,
+                                             LocalDate startDate, LocalDate endDate) throws JRException {
 
-//    @Override
-//    public byte[] generateReport(UUID merchantId, String username,
-//                                 RevenueRequestDTO requestDTO,
-//                                 String format) throws JRException {
-//
-//        List<OrderDetail> orderDetails = new ArrayList<>();
-//        Users users = userService.getUsersByUsername(username);
-//        UUID userId = users.getId();
-//        String request = requestDTO.getRequestBy();
-//        String periodeInfo = "";
-//
-//        if(request.equals("yearly")) {
-//            orderDetails = orderDetailRepository.findOrderDetailsByYear(
-//                    merchantId, userId,
-//                    requestDTO.getYear());
-//            periodeInfo = "tahun "+ requestDTO.getYear();
-//        }
-//        else if (request.equals("monthly")) {
-//            orderDetails = orderDetailRepository.findOrderDetailsByMonth(
-//                    merchantId, userId,
-//                    requestDTO.getMonth(),
-//                    requestDTO.getYear());
-//            periodeInfo = "bulan " + Month.of(requestDTO.getMonth()) + requestDTO.getYear();
-//        }
-//        else if (request.equals("weekly")) {
-//            LocalDate startDate = requestDTO.getStartDate().with(DayOfWeek.MONDAY);
-//            LocalDate endDate = startDate.plusDays(6);
-//            orderDetails = orderDetailRepository.findOrderDetailsByCustomDate(
-//                    merchantId, userId,
-//                    startDate, endDate);
-//            periodeInfo = getRangeDate(startDate, endDate)+startDate.getMonth()+" "+startDate.getYear();
-//        }
-//        else if (request.equals("custom")) {
-//            orderDetails = orderDetailRepository.findOrderDetailsByCustomDate(
-//                    merchantId, userId,
-//                    requestDTO.getStartDate(),
-//                    requestDTO.getEndDate());
-//            periodeInfo = requestDTO.getStartDate()+" sampai "+requestDTO.getEndDate();
-//        }
-//        MerchantDTO merchant = merchantService.getMerchantById(merchantId);
-//        parameter.put("merchantName", merchant.getMerchantName());
-//        parameter.put("merchantLoc", merchant.getMerchantLocation());
-//        parameter.put("periodeInfo", periodeInfo);
-//        parameter.put("sellerName", users.getFirstName()+" "+users.getLastName());
-//        List<InvoiceReportDTO> reportData = convertToReportDTO(orderDetails);
-//        return generateJasperReport(reportData, format);
-//    }
-//
-//    private List<InvoiceReportDTO> convertToReportDTO(List<OrderDetail> orderDetails) {
-//        List<InvoiceReportDTO> reportData = new ArrayList<>();
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd HH.mm");
-//        for (OrderDetail orderDetail : orderDetails) {
-//            InvoiceReportDTO dto = new InvoiceReportDTO();
-//            dto.setProductName(orderDetail.getProduct().getProduct_name());
-//            dto.setOrderTime(orderDetail.getOrders().getOrder_time().format(formatter));
-//            dto.setTotalOrder(orderDetail.getQuantity());
-//            dto.setTotalPrice(orderDetail.getTotal_price());
-//            reportData.add(dto);
-//        }
-//        return reportData;
-//    }
+        Map<String,Object> parameter =  new HashMap<>();
+        parameter = generateReport(parameter, iataCode, periode, month, year, week, startDate, endDate);
+
+        JasperPrint jasperPrint = createJasperPrint(parameter, "/templates/airline.jrxml");
+
+        return exportReport(jasperPrint, format);
+    }
 
 
+    public Map<String, Object> generateReport(Map<String, Object> parameter, String iataCode, String periode,
+                                              Integer month, Integer year, LocalDate week, LocalDate startDate, LocalDate endDate) throws JRException {
 
+        List<Flight> flightList = new ArrayList<>();
+        String periodeInfo = "";
+
+        if(periode.equals("yearly")) {
+            flightList = orderRepository.findFlightsByAirlineAndYear(iataCode, year);
+            periodeInfo = "tahun "+ year;
+        }
+        else if (periode.equals("monthly")) {
+            flightList = orderRepository.findFlightsByAirlineAndMonthAndYear(iataCode, month, year);
+            periodeInfo = "bulan " + Month.of(month) + year;
+        }
+        else if (periode.equals("weekly")) {
+            LocalDate startDateW = week.with(DayOfWeek.MONDAY);
+            LocalDate endDateW = startDate.plusDays(6);
+            flightList = orderRepository.findFlightsByAirlineAndPeriod(iataCode,
+                    startDateW, endDateW);
+            periodeInfo = getRangeDate(startDateW, endDateW)+startDate.getMonth()+" "+startDateW.getYear();
+        }
+        else if (periode.equals("custom")) {
+            flightList = orderRepository.findFlightsByAirlineAndPeriod(
+                    iataCode, startDate, endDate);
+            periodeInfo = startDate+" sampai "+endDate;
+        }
+
+        Airline airline = flightList.stream()
+                .map(Flight::getAirline)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
+        if (airline != null) {
+            parameter.put("airlineIconUrl", airline.getImageUrl());
+            parameter.put("airlineName", airline.getAirline_name());
+        }
+        parameter.put("iconUrl", getSource("/templates/icon/travimate.png"));
+        parameter.put("dataOrder", dataOrderSource(flightList));
+        parameter.put("periodeInfo", periodeInfo);
+        return parameter;
+    }
+
+    private Object dataOrderSource(List<Flight> flightList) {
+        List<AirlineRevenueReport> airlineRevenueReports = new LinkedList<>();
+
+        for (Flight flight : flightList){
+            AirlineRevenueReport airlineReport = new AirlineRevenueReport();
+            airlineReport.setFlightNumber(flight.getFlightNumber());
+            airlineReport.setOrderTime(buildOrderTime(flight.getOrders()));
+            airlineReport.setStringTotalOrder(buildTotalOrder(flight.getOrders()));
+            airlineReport.setStringTotalAmount(buildTotalAmount(flight.getOrders()));
+            airlineReport.setTotalAmount(sumTotalAmount(flight.getOrders()));
+            airlineReport.setTotalOrder(getTotalPassengerCount(flight.getOrders()));
+            airlineRevenueReports.add(airlineReport);
+        }
+        return new JRBeanCollectionDataSource(airlineRevenueReports);
+    }
+
+    public int getTotalPassengerCount(List<Orders> ordersList) {
+        int totalPassengerCount = 0;
+        for (Orders order : ordersList) {
+            int passengerCount = order.getPassengerList().size();
+            totalPassengerCount += passengerCount;
+        }
+
+        return totalPassengerCount;
+    }
+
+    private String getRangeDate(LocalDate startDate, LocalDate endDate){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd");
+        return startDate.format(formatter)+"-"+endDate.format(formatter)+" ";
+    }
+
+    private Integer sumTotalAmount(List<Orders> ordersList) {
+        return (int) ordersList.stream().mapToLong(Orders::getAmount).sum();
+    }
+
+    private String buildTotalAmount(List<Orders> ordersList) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Orders orders : ordersList) {
+            stringBuilder.append(orders.getAmount()).append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    private String buildTotalOrder(List<Orders> ordersList) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Orders orders : ordersList) {
+            stringBuilder.append(orders.getPassengerList().size()).append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    public String buildOrderTime(List<Orders> ordersList) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Orders orders : ordersList) {
+            stringBuilder.append(orders.getBookedDate()).append("\n");
+        }
+        return stringBuilder.toString();
+    }
 
 }

@@ -56,6 +56,7 @@ public class PaymentServiceImpl implements PaymentService{
             helper = new MimeMessageHelper(msg, true);
             helper.setTo(orders.getBookedMail());
             helper.setSubject("Travimate E-ticket");
+            helper.setText("e ticket diterbitkan");
             ByteArrayDataSource dataSource = new ByteArrayDataSource(ticketReportBytes, "application/pdf");
             helper.addAttachment("ticket_report.pdf", dataSource);
             javaMailSender.send(msg);

@@ -12,6 +12,5 @@ public class PassengerRequestDTO {
     private String greeting;
     private String firstName;
     private String lastName;
-    private int national_id;
     private String type;
 }

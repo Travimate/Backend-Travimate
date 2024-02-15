@@ -18,7 +18,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan("dev"));
 const dotenv = require("dotenv");
-dotenv.config();
 const PORT = process.env.PORT || 8081;
 
 // database

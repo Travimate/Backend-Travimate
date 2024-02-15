@@ -14,10 +14,6 @@
     "db:drop": "npm run sequelize db:drop",
     "db:reset": "npm run db:drop && npm run db:init"
   },
-  "engines": {
-    "node": ">=20.0.0",
-    "npm": ">=10.0.0"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",

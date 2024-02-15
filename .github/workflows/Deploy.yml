@@ -33,12 +33,12 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            pm2 delete all || true
+            killall node || true
             cd .ssh/Backend-Travimate/Backend-JS-Auth
             npm install
-            npm run migrate
-            pm2 start npm --name "Backend-Travimate" -- start > /dev/null 2>&1 &
-
+            npm update
+            npm start > /dev/null 2>&1 &
+            
       - name: Kill and Run new JAR file in VM
         uses: appleboy/ssh-action@master
         with:

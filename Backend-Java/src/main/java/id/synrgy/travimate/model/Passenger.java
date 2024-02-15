@@ -12,10 +12,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @Table(name = "passanger")
-public class Passenger {
+public class Passenger extends AuditModel{
 
     public enum PassengerType { ADULT, CHILD }
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -24,7 +23,6 @@ public class Passenger {
     private String greeting;
     private String firstName;
     private String lastName;
-    private int national_id;
     private String ticketId;
 
     @Enumerated(EnumType.STRING)

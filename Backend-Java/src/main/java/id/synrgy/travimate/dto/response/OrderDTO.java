@@ -16,7 +16,7 @@ public class OrderDTO {
 
     private UUID orderID;
 
-    private Users users;
+    private String username;
 
     private String bookingID;
 

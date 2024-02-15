@@ -17,7 +17,8 @@ public class Airline {
 
     private String imageUrl;
 
-    private int cabinBaggage;
+    private Integer cabinBaggage;
 
-    private int baggage;
+    private Integer baggage;
+
 }

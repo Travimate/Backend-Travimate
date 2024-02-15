@@ -4,7 +4,6 @@ import id.synrgy.travimate.dto.request.OrderRequestDTO;
 import id.synrgy.travimate.dto.response.ResponseHandler;
 import id.synrgy.travimate.service.OrderService;
 import id.synrgy.travimate.service.ReportService;
-import io.swagger.v3.oas.annotations.Hidden;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.UUID;
 
-@Hidden
 @RestController
 @RequestMapping("/api/v1/order")
 public class OrderController {
@@ -44,11 +42,18 @@ public class OrderController {
         return ResponseHandler.generateResponseSuccess(orderService.cancelOrder(orderID));
     }
 
+    @GetMapping("/history")
+    public ResponseEntity<Object> history(Principal principal){
+        return ResponseHandler.generateResponseSuccess(orderService.history(principal.getName()));
+    }
+
+
+
     @GetMapping("/e-ticket")
     public ResponseEntity<byte[]> generateReport(@RequestParam UUID orderID,
                                                  @RequestParam String format) throws JRException {
         byte[] reportBytes = reportService
-                .generateReport(orderID, format);
+                .generateTicketReport(orderID, format);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentDispositionFormData("attachment", "report." + format);

@@ -38,5 +38,4 @@ public class FlightDTO {
 
     private Integer stock;
 
-    private Long price;
 }

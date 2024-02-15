@@ -12,7 +12,7 @@ import java.util.Set;
 @Setter
 @Getter
 @NoArgsConstructor
-public class RouteDTO {
+public class RouteProcess {
 
     private String code;
 
@@ -24,7 +24,7 @@ public class RouteDTO {
 
     private Airport connecting_airport;
 
-    private Set<FlightDTO> flights;
+    private Set<Flight> flights;
 
     private Integer stops;
 

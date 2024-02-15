@@ -14,7 +14,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "orders")
-public class Orders {
+public class Orders extends AuditModel{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

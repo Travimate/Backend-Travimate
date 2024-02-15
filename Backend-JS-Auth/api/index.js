@@ -5,9 +5,14 @@ const morgan = require("morgan");
 const swagger = require("./../swagger"); // Import the Swagger configuration
 const { sequelize, Role } = require("./models");
 const app = express();
-// const corsOptions = {
-//   origin: "http://localhost:8081",
-// };
+const corsOptions = {
+  origin: "http://localhost:8081",
+};
+const dotenv = require('dotenv');
+dotenv.config();
+app.use(cors({
+  origin: '*' 
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());

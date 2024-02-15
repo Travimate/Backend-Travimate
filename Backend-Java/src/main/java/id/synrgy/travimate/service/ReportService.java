@@ -5,5 +5,6 @@ import net.sf.jasperreports.engine.JRException;
 import java.util.UUID;
 
 public interface ReportService {
-    byte[] generateReport(UUID orderID, String format) throws JRException;
+    byte[] generateTicketReport(UUID orderID, String format) throws JRException;
+
 }

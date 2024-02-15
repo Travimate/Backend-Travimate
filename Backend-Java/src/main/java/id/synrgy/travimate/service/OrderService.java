@@ -13,4 +13,6 @@ public interface OrderService {
     Object payOrder(UUID orderID);
 
     Orders findOrder(UUID orderID);
+
+    Object history(String name);
 }

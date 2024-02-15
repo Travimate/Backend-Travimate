@@ -1,10 +1,12 @@
 package id.synrgy.travimate.security.jwt;
 
 import id.synrgy.travimate.security.service.UserDetailsServiceImpl;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     JwtUtils jwtUtils;
 
+    @Getter
+    private static Object roles;
+
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
     @Override
@@ -33,7 +38,11 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         String jwt = parsetJwt(request);
         if (jwt !=null && jwtUtils.validateJwtToken(jwt, response)) {
-            String id = jwtUtils.getId(jwt);
+
+            Claims claims = jwtUtils.getObject(jwt);
+            roles = claims.get("authorities");
+            String id = claims.get("id").toString();
+
             UserDetails userDetails = userDetailsService.loadUserByUsername(id);
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

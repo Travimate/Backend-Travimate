@@ -16,7 +16,6 @@ public class PassengerDTO {
     private String greeting;
     private String firstName;
     private String lastName;
-    private int national_id;
     private String ticketId;
     private String flightNumber;
 }

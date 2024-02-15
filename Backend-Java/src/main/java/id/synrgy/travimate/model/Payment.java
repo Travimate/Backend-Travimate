@@ -12,7 +12,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "payment")
-public class Payment {
+public class Payment extends AuditModel{
 
     public enum PaymentMethod { EWALLET, BANK }
 

@@ -46,7 +46,9 @@ public class PaymentServiceImpl implements PaymentService{
         payment.setConfirmed(true);
 
         if(isPaid){
-            //proses gateway dll
+
+            //proses gateway dll kalo ntar ada
+
             orderService.payOrder(orderID, true);
 
             byte[] ticketReportBytes = reportService.generateTicketReport(orderID, "pdf");

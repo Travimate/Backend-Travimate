@@ -41,13 +41,13 @@ public class PaymentServiceImpl implements PaymentService{
 
         Orders orders = orderService.findOrder(orderID);
         Payment payment = orders.getPayment();
-        payment.setMethod(Payment.PaymentMethod.valueOf(method.toUpperCase()));
         payment.setAmount(orders.getAmount());
         payment.setConfirmed(true);
 
         if(isPaid){
 
             //proses gateway dll kalo ntar ada
+            payment.setMethod(Payment.PaymentMethod.valueOf(method.toUpperCase()));
 
             orderService.payOrder(orderID, true);
 
@@ -68,6 +68,7 @@ public class PaymentServiceImpl implements PaymentService{
             }
         } else {
             orderService.payOrder(orderID, false);
+            payment.setMethod(Payment.PaymentMethod.valueOf("CANCEL"));
         }
 
         paymentRepository.save(payment);

@@ -22,10 +22,9 @@ public interface FlightRepository extends JpaRepository<Flight, UUID> {
                                          @Param("airline") String airline,
                                          @Param("class") String flightClass);
 
-    @Query("SELECT f FROM Flight f " +
-            "LEFT JOIN f.orders o " +
-            "LEFT JOIN f.passengers p " +
-            "WHERE f.dof < ?1 " +
-            "AND o IS NULL AND p IS NULL")
+    @Query("SELECT f FROM Flight f LEFT " +
+            "JOIN f.orders o " +
+            "LEFT JOIN o.passengerList p " +
+            "WHERE f.dof < ?1 AND o IS NULL AND p IS NULL")
     List<Flight> findExpiredFlights(LocalDate today);
 }

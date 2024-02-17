@@ -17,41 +17,6 @@ public interface OrderRepository extends JpaRepository<Orders, UUID> {
 
     List<Orders> findByUsers(Users users);
 
-//    @Query(value = "SELECT DISTINCT o FROM Orders o " +
-//            "INNER JOIN o.flightList f " +
-//            "INNER JOIN f.airline a " +
-//            "WHERE o.completed = true " +
-//            "AND o.paid = true " +
-//            "AND a.iataCode = :iataCode " +
-//            "AND EXTRACT(YEAR FROM o.bookedDate) = :year")
-//    List<Orders> findOrdersByAirlineAndYear(@Param("iataCode") String iataCode,
-//                                            @Param("year") int year);
-//
-//    @Query(value = "SELECT DISTINCT o FROM Orders o " +
-//            "INNER JOIN o.flightList f " +
-//            "INNER JOIN f.airline a " +
-//            "WHERE o.completed = true " +
-//            "AND o.paid = true " +
-//            "AND a.iataCode = :iataCode " +
-//            "AND EXTRACT(YEAR FROM o.bookedDate) = :year " +
-//            "AND EXTRACT(MONTH FROM o.bookedDate) = :month")
-//    List<Orders> findOrdersByAirlineAndMonthAndYear(@Param("iataCode") String iataCode,
-//                                                    @Param("month") int month,
-//                                                    @Param("year") int year);
-//
-//    @Query(value = "SELECT DISTINCT o FROM Orders o " +
-//            "INNER JOIN o.flightList f " +
-//            "INNER JOIN f.airline a " +
-//            "WHERE o.completed = true " +
-//            "AND o.paid = true " +
-//            "AND a.iataCode = :iataCode " +
-//            "AND o.bookedDate BETWEEN :startDate " +
-//            "AND :endDate")
-//    List<Orders> findOrdersByAirlineAndPeriod(@Param("iataCode") String iataCode,
-//                                              @Param("startDate") LocalDate startDate,
-//                                              @Param("endDate") LocalDate endDate);
-
-
     @Query(value = "SELECT DISTINCT f FROM Orders o " +
         "INNER JOIN o.flightList f " +
         "INNER JOIN f.airline a " +

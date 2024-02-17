@@ -5,6 +5,7 @@ import id.synrgy.travimate.dto.request.PassengerRequestDTO;
 import id.synrgy.travimate.dto.response.FlightDTO;
 import id.synrgy.travimate.dto.response.OrderDTO;
 import id.synrgy.travimate.dto.response.PassengerDTO;
+import id.synrgy.travimate.exception.ExistingResourceFoundException;
 import id.synrgy.travimate.exception.ResourceNotFoundException;
 import id.synrgy.travimate.model.*;
 import id.synrgy.travimate.repository.OrderRepository;
@@ -77,9 +78,13 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public Object cancelOrder(UUID orderID) {
         Orders orders = findOrder(orderID);
-        orders.setCompleted(false);
-        orderRepository.save(orders);
-        return mapToOrderDTO(orders);
+        if(orders.getCompleted()==null){
+            orders.setCompleted(false);
+            orderRepository.save(orders);
+            return mapToOrderDTO(orders);
+        } else {
+            throw new ExistingResourceFoundException("data sudah terkonfirmasi : " + orders.getCompleted());
+        }
     }
 
     @Override

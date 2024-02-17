@@ -92,7 +92,6 @@ public class OrderServiceImpl implements OrderService{
     public Object payOrder(UUID orderID, boolean isPaid) {
 
         Orders orders = findOrder(orderID);
-
         if(isPaid){
             orders.setPaid(true);
             reduceFlightStock(orders);

@@ -242,6 +242,8 @@ public class FlightServiceImpl implements FlightService{
     }
 
     private List<JourneyDTO> findJourney(String dep, String arr, LocalDate dateOfFlight, String flightClass) {
+
+
         List<JourneyDTO> journeyDTOList = new ArrayList<>();
         if (dateOfFlight.isBefore(LocalDate.now())) {
             return journeyDTOList;

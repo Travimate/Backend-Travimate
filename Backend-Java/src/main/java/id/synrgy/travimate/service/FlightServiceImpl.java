@@ -524,4 +524,8 @@ public class FlightServiceImpl implements FlightService{
                 .orElseThrow(()-> new ResourceNotFoundException(id));
     }
 
+    @Override
+    public Flight save(Flight flight){
+        return flightRepository.save(flight);
+    }
 }

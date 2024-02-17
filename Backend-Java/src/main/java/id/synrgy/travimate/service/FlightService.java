@@ -31,4 +31,6 @@ public interface FlightService {
     FlightData findFlightDataByID(UUID id);
 
     Flight findFlightByID(UUID id);
+
+    Flight save(Flight flight);
 }

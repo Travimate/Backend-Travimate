@@ -49,7 +49,7 @@ public class Orders extends AuditModel{
 
     private Boolean completed;
 
-    private boolean paid;
+    private Boolean paid;
 
     @ManyToOne
     @JoinColumn(name = "payment")

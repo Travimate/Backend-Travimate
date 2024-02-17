@@ -23,8 +23,10 @@ public class PaymentController {
     }
 
     @PostMapping("/pay")
-    public ResponseEntity<Object> makePayment(@RequestParam UUID orderID, @RequestParam String method){
-        return ResponseHandler.generateResponseSuccess(paymentService.makePayment(orderID, method));
+    public ResponseEntity<Object> makePayment(@RequestParam UUID orderID,
+                                              @RequestParam String method,
+                                              @RequestParam boolean isPaid){
+        return ResponseHandler.generateResponseSuccess(paymentService.makePayment(orderID, method, isPaid));
     }
 
     @GetMapping("/status")

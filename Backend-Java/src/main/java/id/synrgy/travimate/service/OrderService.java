@@ -10,7 +10,7 @@ public interface OrderService {
 
     Object cancelOrder(UUID orderID);
 
-    Object payOrder(UUID orderID);
+    Object payOrder(UUID orderID, boolean b);
 
     Orders findOrder(UUID orderID);
 

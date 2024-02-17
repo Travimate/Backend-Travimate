@@ -14,7 +14,7 @@ import java.util.UUID;
 @Table(name = "payment")
 public class Payment extends AuditModel{
 
-    public enum PaymentMethod { EWALLET, BANK }
+    public enum PaymentMethod { EWALLET, BANK, CANCEL}
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

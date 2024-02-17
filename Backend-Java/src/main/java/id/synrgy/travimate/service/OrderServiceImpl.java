@@ -12,6 +12,7 @@ import id.synrgy.travimate.repository.PassengerRepository;
 import id.synrgy.travimate.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -75,20 +76,36 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public Object cancelOrder(UUID orderID) {
-        Orders orders = orderRepository.findById(orderID)
-                .orElseThrow(()-> new ResourceNotFoundException(orderID));
+        Orders orders = findOrder(orderID);
         orders.setCompleted(false);
         orderRepository.save(orders);
-        return orders;
+        return mapToOrderDTO(orders);
     }
 
     @Override
-    public Object payOrder(UUID orderID) {
+    @Transactional
+    public Object payOrder(UUID orderID, boolean isPaid) {
+
         Orders orders = findOrder(orderID);
-        orders.setPaid(true);
+
+        if(isPaid){
+            orders.setPaid(true);
+            reduceFlightStock(orders);
+        }
         orders.setCompleted(true);
         orderRepository.save(orders);
-        return orders;
+        return mapToOrderDTO(orders);
+    }
+
+    private void reduceFlightStock(Orders orders) {
+        List<Flight> flights = orders.getFlightList();
+        int totalPassengerCount = orders.getPassengerList().size();
+
+        for (Flight flight : flights) {
+            int currentStock = flight.getStock();
+            flight.setStock(currentStock - totalPassengerCount);
+            flightService.save(flight);
+        }
     }
 
     @Override
@@ -150,7 +167,7 @@ public class OrderServiceImpl implements OrderService{
         orderDTO.setPnrCode(orders.getPnrCode());
         orderDTO.setAmount(orders.getAmount());
         orderDTO.setCompleted(orders.getCompleted());
-        orderDTO.setPaid(orders.isPaid());
+        orderDTO.setPaid(orders.getPaid());
 
         List<FlightDTO> flightDTOList = orders.getFlightList().stream()
                 .map(flightService::mapToDTO)

@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public interface PaymentService {
 
-    Object makePayment(UUID orderID, String method);
+    Object makePayment(UUID orderID, String method, boolean isPaid);
 
     Object checkStatus(UUID paymentID);
 }

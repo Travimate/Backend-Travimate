@@ -6,9 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface FlightRepository extends JpaRepository<Flight, UUID> {
@@ -23,4 +21,11 @@ public interface FlightRepository extends JpaRepository<Flight, UUID> {
                                          @Param("dof") LocalDate dof,
                                          @Param("airline") String airline,
                                          @Param("class") String flightClass);
+
+    @Query("SELECT f FROM Flight f " +
+            "LEFT JOIN f.orders o " +
+            "LEFT JOIN f.passengers p " +
+            "WHERE f.dof < ?1 " +
+            "AND o IS NULL AND p IS NULL")
+    List<Flight> findExpiredFlights(LocalDate today);
 }

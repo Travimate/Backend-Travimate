@@ -10,6 +10,7 @@ import id.synrgy.travimate.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -47,6 +48,14 @@ public class FlightServiceImpl implements FlightService{
         this.baseFareRepository = baseFareRepository;
     }
 
+    @Scheduled(cron = "0 0 0 * * *")
+    public void cleanupExpiredFlights() {
+        LocalDate today = LocalDate.now();
+        List<Flight> expiredFlights = flightRepository.findExpiredFlights(today);
+        for (Flight flight : expiredFlights) {
+            flightRepository.delete(flight);
+        }
+    }
 
     @Override
     public List<Object> createFlight(List<FlightRequestDTO> flightRequestDTOList){
@@ -234,6 +243,10 @@ public class FlightServiceImpl implements FlightService{
 
     private List<JourneyDTO> findJourney(String dep, String arr, LocalDate dateOfFlight, String flightClass) {
         List<JourneyDTO> journeyDTOList = new ArrayList<>();
+        if (dateOfFlight.isBefore(LocalDate.now())) {
+            return journeyDTOList;
+        }
+
         Set<FlightData> flightDataSet = new LinkedHashSet<>(flightDataRepository
                 .findFlightDataByDepartureArrivalAndDate(
                         findAirportByIATACode(dep), findAirportByIATACode(arr), dateOfFlight));
@@ -253,12 +266,7 @@ public class FlightServiceImpl implements FlightService{
                 journey.setRoute(Collections.singletonList(mapToDTO(routeProcess)));
                 loopJourney(journey, Collections.singletonList(routeProcess));
                 journey.setBaseFare(flightData.getBaseFare());
-//                RouteDTO routeDTO = journey.getRoute()
-//                        .stream().findFirst()
-//                        .orElse(null);
-                if (!journey.getRoute().isEmpty()
-//                        && routeDTO!=null && !routeDTO.getFlights().isEmpty()
-                ) {
+                if (!journey.getRoute().isEmpty()) {
                     journeyDTOList.add(journey);
                 }
             }

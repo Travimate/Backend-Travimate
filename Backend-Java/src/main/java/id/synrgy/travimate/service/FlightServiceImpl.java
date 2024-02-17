@@ -485,13 +485,9 @@ public class FlightServiceImpl implements FlightService{
 
             if(airline.isPresent()){
                 Airline existingAirline = airline.get();
-                if(existingAirline.getImageUrl() == null){
-                    existingAirline.setImageUrl(dto.getUrl());
-                    airlineRepository.save(existingAirline);
-                    results.add(existingAirline);
-                } else {
-                    results.add("Data dengan 'iataCode' = '" + dto.getIataCode() + "' sudah memiliki URL gambar.");
-                }
+                existingAirline.setImageUrl(dto.getUrl());
+                airlineRepository.save(existingAirline);
+                results.add(existingAirline);
             } else {
                 results.add("Data dengan 'iataCode' = '" + dto.getIataCode() + "' tidak ditemukan.");
             }

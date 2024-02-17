@@ -9,6 +9,7 @@ import id.synrgy.travimate.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -24,15 +25,6 @@ public class FlightController {
         this.flightService = flightService;
     }
 
-    @PostMapping("/flight")
-    public ResponseEntity<Object> createFlight(@RequestBody List<FlightRequestDTO> flightRequestDTO){
-        return ResponseHandler.generateResponseSuccess(flightService.createFlight(flightRequestDTO));
-    }
-
-    @PostMapping("/flight-data")
-    public ResponseEntity<?> createFlightData(@RequestBody List<FlightDataRequestDTO> flightDataDTOList){
-        return ResponseHandler.generateResponseSuccess(flightService.createFlightDataDTO(flightDataDTOList));
-    }
 
     @GetMapping("/find-journey")
     public ResponseEntity<?> findJourney(@RequestParam String dep,
@@ -53,6 +45,20 @@ public class FlightController {
     public ResponseEntity<Object> searchAirline(@RequestParam String iataCode){
         return ResponseHandler.generateResponseSuccess(flightService.findAirlineByIATACode(iataCode));
     }
+
+
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/flight")
+    public ResponseEntity<Object> createFlight(@RequestBody List<FlightRequestDTO> flightRequestDTO){
+        return ResponseHandler.generateResponseSuccess(flightService.createFlight(flightRequestDTO));
+    }
+
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/flight-data")
+    public ResponseEntity<?> createFlightData(@RequestBody List<FlightDataRequestDTO> flightDataDTOList){
+        return ResponseHandler.generateResponseSuccess(flightService.createFlightDataDTO(flightDataDTOList));
+    }
+
 
 
     //    @PostMapping("/flight-data")

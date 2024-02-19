@@ -47,10 +47,6 @@ public class OpenAPIConfig {
         .license(mitLicense)
         .version("3.1.0");
 
-    // return new OpenAPI().info(info).setOpenapi("3.0.0").servers(List.of(devServer, prodServer));
-    return new OpenAPI()
-    .info(info)
-    .setOpenapi("3.0.0")
-    .servers(List.of(devServer, prodServer));
+    return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
   }
 }

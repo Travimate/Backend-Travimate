@@ -38,14 +38,14 @@ public class OpenAPIConfig {
     License mitLicense = new License().name("MIT License")
             .url("https://choosealicense.com/licenses/mit/");
 
-    Info info = new Info()
-        .title("TRAVIMATE BACKEND")
-        .version("1.0")
-        .contact(contact)
-        .description("This API exposes endpoints to manage backend of travimate.")
-            .termsOfService("https://www.travimate.com/terms")
-        .license(mitLicense)
-        .version("3.1.0");
+    // Info info = new Info()
+    //     .title("TRAVIMATE BACKEND")
+    //     .version("1.0")
+    //     .contact(contact)
+    //     .description("This API exposes endpoints to manage backend of travimate.")
+    //         .termsOfService("https://www.travimate.com/terms")
+    //     .license(mitLicense)
+    //     .version("3.1.0");
 
     return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
   }

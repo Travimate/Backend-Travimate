@@ -44,7 +44,8 @@ public class OpenAPIConfig {
         .contact(contact)
         .description("This API exposes endpoints to manage backend of travimate.")
             .termsOfService("https://www.travimate.com/terms")
-        .license(mitLicense);
+        .license(mitLicense)
+        .version("3.1.0");
 
     return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
   }

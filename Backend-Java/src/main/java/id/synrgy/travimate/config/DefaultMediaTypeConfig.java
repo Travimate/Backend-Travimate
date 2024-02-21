@@ -10,15 +10,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
-@Configuration
-@EnableWebMvc
-public class DefaultMediaTypeConfig implements WebMvcConfigurer {
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        StringHttpMessageConverter messageConverter = new StringHttpMessageConverter();
-        messageConverter.setSupportedMediaTypes(List.of(MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN, MediaType.ALL));
-        converters.add(messageConverter);
-        converters.add(new MappingJackson2HttpMessageConverter());
-    }
-
-}
+//@Configuration
+//@EnableWebMvc
+//public class DefaultMediaTypeConfig implements WebMvcConfigurer {
+//    @Override
+//    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+//        StringHttpMessageConverter messageConverter = new StringHttpMessageConverter();
+//        messageConverter.setSupportedMediaTypes(List.of(MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN, MediaType.ALL));
+//        converters.add(messageConverter);
+//        converters.add(new MappingJackson2HttpMessageConverter());
+//    }
+//
+//}
